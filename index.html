@@ -1,0 +1,1485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#14284A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Seaways">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%2314284A%22/%3E%3Ctext x=%2250%22 y=%2268%22 font-size=%2254%22 text-anchor=%22middle%22 fill=%22%23D4B065%22 font-family=%22Arial%22 font-weight=%22700%22%3ES%3C/text%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Seaways Exim Order Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F5F8;--surface:#FFFFFF;--surface-2:#F8F9FB;--ink:#0F1D33;--muted:#5D6B80;--line:#DCE2EB;
+  --navy:#14284A;--navy-ink:#FFFFFF;--gold:#A9843A;--gold-soft:#F4EEDF;
+  --btn:#14284A;--btn-ink:#FFFFFF;--ok:#1F7A4D;--ok-soft:#E3F2EA;--warn:#9A5F0E;--warn-soft:#FBF0DC;
+  --bad:#B3362E;--bad-soft:#F9E4E2;--info:#1E4E8C;--info-soft:#E3ECF8;
+  --navh:64px;--side:232px;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0A1220;--surface:#111C2E;--surface-2:#16233A;--ink:#E6EBF2;--muted:#93A0B4;--line:#24344F;
+  --navy:#0D192D;--navy-ink:#E6EBF2;--gold:#D4B065;--gold-soft:#2A2517;
+  --btn:#D4B065;--btn-ink:#0D192D;--ok:#5BC08C;--ok-soft:#14301F;--warn:#E3A94B;--warn-soft:#33260F;
+  --bad:#EE8078;--bad-soft:#3A1917;--info:#8DB4EA;--info-soft:#15263F;color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0A1220;--surface:#111C2E;--surface-2:#16233A;--ink:#E6EBF2;--muted:#93A0B4;--line:#24344F;
+  --navy:#0D192D;--navy-ink:#E6EBF2;--gold:#D4B065;--gold-soft:#2A2517;
+  --btn:#D4B065;--btn-ink:#0D192D;--ok:#5BC08C;--ok-soft:#14301F;--warn:#E3A94B;--warn-soft:#33260F;
+  --bad:#EE8078;--bad-soft:#3A1917;--info:#8DB4EA;--info-soft:#15263F;color-scheme:dark;}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+img{max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{margin:0;line-height:1.2;letter-spacing:-.01em}
+h1{font-size:24px;font-weight:700}h2{font-size:18px;font-weight:600}h3{font-size:15px;font-weight:600}
+p{margin:0}
+.muted{color:var(--muted)}.small{font-size:13px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* shell */
+.app{display:flex;min-height:100vh}
+[hidden]{display:none!important}
+.side{display:none}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--navy);color:var(--navy-ink);display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:3px solid var(--gold)}
+.brand{display:flex;flex-direction:column;line-height:1.1}
+.brand b{font-size:16px;font-weight:700;letter-spacing:.01em}
+.brand span{font-size:12px;opacity:.75}
+.topbar .grow{flex:1}
+.rolepill{font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.35);color:inherit;background:transparent;cursor:pointer}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.content{width:100%;max-width:1180px;margin:0 auto;padding:20px 16px calc(var(--navh) + 32px)}
+.bottomnav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom,0px)}
+.bottomnav button{flex:1;border:0;background:none;padding:8px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11.5px;color:var(--muted);cursor:pointer}
+.bottomnav button svg{width:22px;height:22px}
+.bottomnav button.on{color:var(--ink);font-weight:600}
+.bottomnav button.on svg{color:var(--gold)}
+@media (min-width:900px){
+  :root{--navh:0px}
+  .bottomnav{display:none}
+  .topbar .brand{display:none}
+  .side{display:flex;flex-direction:column;width:var(--side);flex:0 0 var(--side);background:var(--navy);color:var(--navy-ink);position:sticky;top:0;height:100vh;padding:22px 14px}
+  .side .brand{padding:0 10px 22px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:14px}
+  .side .brand b{font-size:18px}
+  .side nav{display:flex;flex-direction:column;gap:2px}
+  .side nav button{display:flex;align-items:center;gap:12px;border:0;background:none;color:inherit;opacity:.78;padding:10px 12px;border-radius:8px;text-align:left;cursor:pointer;font-size:14.5px}
+  .side nav button svg{width:19px;height:19px}
+  .side nav button:hover{opacity:1;background:rgba(255,255,255,.06)}
+  .side nav button.on{opacity:1;background:rgba(255,255,255,.09);box-shadow:inset 3px 0 0 var(--gold)}
+  .side .foot{margin-top:auto;font-size:12.5px;opacity:.8;padding:0 10px;display:flex;flex-direction:column;gap:8px}
+  .topbar{border-bottom:1px solid var(--line);background:var(--surface);color:var(--ink)}
+  .rolepill{border-color:var(--line)}
+  .content{padding:28px 32px 40px}
+}
+
+/* building blocks */
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.wrap{flex-wrap:wrap}
+.stack{display:flex;flex-direction:column;gap:14px}
+.pagehead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.pagehead p{margin-top:4px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.pad{padding:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;background:var(--btn);color:var(--btn-ink);padding:10px 16px;border-radius:8px;font-weight:600;cursor:pointer;min-height:42px;white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.btn.gold{background:var(--gold);color:#fff}
+.btn.danger{background:var(--surface);color:var(--bad);border-color:var(--line)}
+.btn.sm{min-height:34px;padding:6px 12px;font-size:13.5px}
+.btn.block{width:100%}
+.btn svg{width:18px;height:18px}
+.linkbtn{border:0;background:none;color:var(--info);cursor:pointer;padding:0;font-weight:600}
+.input,select.input,textarea.input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:44px}
+textarea.input{min-height:80px;resize:vertical}
+.input:focus{outline:2px solid var(--gold);outline-offset:0;border-color:transparent}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:500}
+label.f .hint{font-weight:400;color:var(--muted);font-size:12.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.search{position:relative}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+.search .input{padding-left:38px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{border:1px solid var(--line);background:var(--surface);padding:6px 12px;border-radius:999px;font-size:13.5px;cursor:pointer;white-space:nowrap}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+:root[data-theme="dark"] .chip.on{background:var(--gold);color:#0D192D;border-color:var(--gold)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip.on{background:var(--gold);color:#0D192D;border-color:var(--gold)}}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.s-new{background:var(--info-soft);color:var(--info)}
+.s-confirmed{background:var(--gold-soft);color:var(--gold)}
+.s-delivered{background:var(--ok-soft);color:var(--ok)}
+.s-cancelled{background:var(--bad-soft);color:var(--bad)}
+.st-low{background:var(--warn-soft);color:var(--warn)}
+.st-out{background:var(--bad-soft);color:var(--bad)}
+.st-ok{background:var(--ok-soft);color:var(--ok)}
+.notice{border-radius:10px;padding:12px 14px;background:var(--warn-soft);color:var(--warn);font-size:14px}
+.empty{text-align:center;padding:36px 16px;color:var(--muted)}
+.empty h3{color:var(--ink);margin-bottom:6px}
+
+/* channel tiles: the two doors */
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.door{position:relative;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:18px;cursor:pointer;display:flex;flex-direction:column;gap:14px;min-height:170px;overflow:hidden}
+.door::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--gold)}
+.door .ic{width:44px;height:44px;border-radius:10px;background:var(--navy);color:var(--gold);display:grid;place-items:center}
+.door .ic svg{width:24px;height:24px}
+.door h2{font-size:20px}
+.door .meta{margin-top:auto;font-size:13px;color:var(--muted)}
+.door:hover{border-color:var(--gold)}
+@media (min-width:700px){.door{min-height:200px;padding:24px}.door h2{font-size:24px}}
+
+/* lists */
+.list{display:flex;flex-direction:column}
+.li{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left;width:100%}
+.li:first-child{border-top:0}
+.li:hover{background:var(--surface-2)}
+.li .grow{flex:1;min-width:0}
+.li .t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li .s{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li .amt{font-weight:600;text-align:right}
+.avatar{width:38px;height:38px;border-radius:10px;background:var(--gold-soft);color:var(--gold);display:grid;place-items:center;font-weight:700;font-size:14px;flex:0 0 38px}
+
+/* stepper header for order flow */
+.steps{display:flex;gap:6px;margin-bottom:16px}
+.steps span{flex:1;height:4px;border-radius:4px;background:var(--line)}
+.steps span.on{background:var(--gold)}
+.custbar{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:14px}
+.custbar .grow{flex:1;min-width:0}
+
+/* product grid */
+.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:700px){.pgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}}
+@media (min-width:1100px){.pgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.pcard{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.pcard.in{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.pimg{aspect-ratio:4/3;background:var(--surface-2);display:grid;place-items:center;overflow:hidden}
+.pimg img{width:100%;height:100%;object-fit:contain;background:#fff}
+.pimg .ph{font-weight:700;font-size:22px;color:var(--muted);letter-spacing:.02em}
+.pbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
+.pname{font-weight:600;font-size:14px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pmeta{font-size:12.5px;color:var(--muted)}
+.pbody .pill{align-self:flex-start}
+.brand b,.brand span{white-space:nowrap}
+.pprice{font-weight:700;font-size:15px;margin-top:auto;padding-top:6px}
+.stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:8px;height:40px}
+.stepper button{width:40px;height:100%;border:0;background:var(--surface-2);cursor:pointer;font-size:20px;line-height:1;flex:0 0 40px}
+.stepper input{flex:1;min-width:0;border:0;text-align:center;background:var(--surface);height:100%;font-weight:600;-moz-appearance:textfield}
+.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.addbtn{margin-top:8px;height:40px;border:1px solid var(--navy);border-radius:8px;background:var(--surface);color:var(--ink);font-weight:600;cursor:pointer}
+.cartbar{position:sticky;bottom:calc(var(--navh) + env(safe-area-inset-bottom,0px) + 10px);margin-top:18px;z-index:15;display:flex;align-items:center;gap:12px;background:var(--navy);color:#fff;border-radius:12px;padding:12px 12px 12px 16px;box-shadow:0 8px 24px rgba(10,20,40,.25)}
+.cartbar .grow{flex:1}
+.cartbar b{font-size:17px}
+.cartbar .btn{background:var(--gold);color:#fff}
+
+/* review table */
+.lines .ln{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:12px 16px;border-top:1px solid var(--line)}
+.lines .ln:first-child{border-top:0}
+.lines .ln .stepper{margin-top:0;width:140px}
+.totals{display:flex;justify-content:space-between;align-items:baseline;padding:14px 16px;border-top:2px solid var(--ink)}
+.totals b{font-size:22px}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}
+@media (min-width:900px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{padding:14px 16px}
+.stat .v{font-size:22px;font-weight:700;margin-top:4px}
+.stat .l{font-size:13px;color:var(--muted)}
+
+/* admin catalog board */
+.segtoggle{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px;gap:4px;margin-bottom:12px}
+.segtoggle button{flex:1;border:0;background:none;padding:9px;border-radius:7px;cursor:pointer;font-weight:600;color:var(--muted)}
+.segtoggle button.on{background:var(--navy);color:#fff}
+.board{display:grid;grid-template-columns:1fr;gap:16px}
+.board .col[data-hide="1"]{display:none}
+@media (min-width:1100px){.segtoggle{display:none}.board{grid-template-columns:1fr 1fr}.board .col[data-hide="1"]{display:block}}
+.colhead{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+.colhead h2{display:flex;align-items:center;gap:10px}
+.colhead h2 .ic{width:30px;height:30px;border-radius:8px;background:var(--navy);color:var(--gold);display:grid;place-items:center}
+.colhead h2 .ic svg{width:17px;height:17px}
+.thumb{width:44px;height:44px;border-radius:8px;background:var(--surface-2);flex:0 0 44px;overflow:hidden;display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--muted);border:1px solid var(--line)}
+.thumb img{width:100%;height:100%;object-fit:cover;background:#fff}
+.li.off{opacity:.5}
+
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(8,15,30,.55);z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);width:100%;max-width:620px;max-height:92vh;overflow:auto;border-radius:16px 16px 0 0;padding:20px 18px calc(18px + env(safe-area-inset-bottom,0px))}
+@media (min-width:700px){.scrim{align-items:center}.sheet{border-radius:14px;padding:24px}}
+.sheet .sh{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.x{border:0;background:var(--surface-2);width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:20px;line-height:1}
+.sheet .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+.kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:14px}
+.kv dt{color:var(--muted)}.kv dd{margin:0}
+.seg2{display:flex;gap:8px}
+.seg2 label{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer}
+.seg2 input{accent-color:var(--gold);width:18px;height:18px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--navh) + env(safe-area-inset-bottom,0px) + 20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:80;font-size:14px;font-weight:500;max-width:90vw}
+.done{text-align:center;padding:36px 20px}
+.done .check{width:64px;height:64px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;margin:0 auto 16px}
+.done .check svg{width:32px;height:32px}
+.tablewrap{overflow-x:auto}
+.progress{height:6px;background:var(--line);border-radius:6px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--gold);width:0}
+@media (prefers-reduced-motion:no-preference){.sheet{animation:up .18s ease-out}@keyframes up{from{transform:translateY(16px);opacity:.6}to{transform:none;opacity:1}}}
+/* v2 additions */
+input.input:not([type=email]):not([type=password]):not([type=date]):not([type=datetime-local]):not(.nocaps),textarea.input{text-transform:uppercase}
+.input::placeholder{text-transform:none}
+.t,.pname,.li .s,.custbar,.kv dd,.door h2{text-transform:uppercase}
+.topbar .who{font-size:13px;opacity:.85}
+.authwrap{min-height:100vh;display:grid;place-items:center;padding:24px 16px;background:var(--navy)}
+.authcard{width:100%;max-width:400px;background:var(--surface);border-radius:14px;padding:28px 24px;border-top:4px solid var(--gold)}
+.authcard .brand{margin-bottom:22px}.authcard .brand b{font-size:20px}.authcard .brand span{color:var(--muted)}
+.err{color:var(--bad);font-size:13.5px;min-height:18px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{font-size:12.5px;font-weight:600;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-2);position:sticky;top:0}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+.tbl td.r,.tbl th.r{text-align:right}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .name{font-weight:600;max-width:280px;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase}
+.tbl .route{max-width:240px;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase}
+.cell{width:92px;min-height:36px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);text-align:right}
+.cell.w{width:108px}
+input.cell{text-transform:uppercase}
+.cell.chg{border-color:var(--gold);background:var(--gold-soft)}
+tr.chg td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+.tog{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted)}
+.tog.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.tog.chg{outline:2px solid var(--gold);outline-offset:1px}
+.applybar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.applybar select,.applybar input{width:auto;min-width:130px}
+.cb{width:18px;height:18px;accent-color:var(--gold)}
+.jlive{background:var(--navy);color:#fff;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.jlive .big{font-size:30px;font-weight:700}
+.jlive .muted{color:rgba(255,255,255,.7)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#3FCB7E;margin-right:6px;box-shadow:0 0 0 4px rgba(63,203,126,.2)}
+.s-active{background:var(--ok-soft);color:var(--ok)}.s-pending{background:var(--warn-soft);color:var(--warn)}.s-verified{background:var(--info-soft);color:var(--info)}
+.photobtn{display:inline-flex;gap:4px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer}
+.photoprev{width:100%;max-height:220px;object-fit:contain;border-radius:8px;background:#000;margin-top:6px}
+.more-list button{width:100%;justify-content:flex-start}
+</style>
+</head>
+<body>
+<div id="authroot"></div>
+<div class="app" id="approot" hidden>
+  <aside class="side">
+    <div class="brand"><b>Seaways Exim</b><span>Order desk</span></div>
+    <nav id="sidenav"></nav>
+    <div class="foot" id="sidefoot"></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <div class="brand"><b>Seaways Exim</b><span>Order desk</span></div>
+      <div class="grow"></div>
+      <span id="whoami" class="small"></span>
+      <button class="rolepill" id="rolepill" data-a="signOut" hidden>Sign out</button>
+    </header>
+    <div class="content" id="main"></div>
+  </div>
+</div>
+<nav class="bottomnav" id="bottomnav" hidden></nav>
+<div id="modal"></div>
+<div id="toast" class="toast" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script>
+(function(){
+"use strict";
+/* ---------- icons ---------- */
+const sv = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const I = {
+  home:sv('<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>'),
+  dash:sv('<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>'),
+  plus:sv('<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>'),
+  orders:sv('<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 12h7M9 16h7M9 8h3"/>'),
+  users:sv('<path d="M4 21v-1a5 5 0 0 1 5-5h6a5 5 0 0 1 5 5v1"/><circle cx="12" cy="8" r="4"/>'),
+  box:sv('<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/>'),
+  sliders:sv('<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>'),
+  route:sv('<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h8a3 3 0 0 0 0-6H8a3 3 0 0 1 0-6h8"/>'),
+  team:sv('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-.5A5.5 5.5 0 0 1 8 14h2a5.5 5.5 0 0 1 5.5 5.5v.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a5 5 0 0 1 3.5 5v1"/>'),
+  more:sv('<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>'),
+  resto:sv('<path d="M7 3v8a2 2 0 0 0 2 2v8M11 3v8a2 2 0 0 1-2 2M9 3v6M17 21V3c-2 1-3 4-3 8h3"/>'),
+  store:sv('<path d="M4 9h16l-1.5 11a1 1 0 0 1-1 .9h-11a1 1 0 0 1-1-.9z"/><path d="M8 9 10 3M16 9l-2-6M9 13v4M15 13v4M12 13v4"/>'),
+  search:sv('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>'),
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
+  cart:sv('<path d="M3 4h2l2.4 11.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20 8H6.2"/><circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/>'),
+  cam:sv('<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/>'),
+  pin:sv('<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>')
+};
+const CH = {restaurant:{label:'Restaurant',short:'Rest.',icon:I.resto},grocery:{label:'Grocery store',short:'Store',icon:I.store}};
+const STATUS = [['new','New'],['confirmed','Confirmed'],['delivered','Delivered'],['cancelled','Cancelled']];
+const JSTATUS = {active:'Active',pending:'Pending',verified:'Verified'};
+const PURPOSES = ['MARKETING','SAMPLE DROP','DELIVERY','PAYMENT COLLECTION','OTHER'];
+const statusLabel = s => (STATUS.find(x=>x[0]===s)||[,s])[1];
+
+/* ---------- state ---------- */
+const S = {
+  ready:false, db:null, user:null, assets:null, downloads:null,
+  readOnly:false, unsubs:[],
+  accounts:{}, accountsLoaded:false, app:{}, me:null,
+  products:[], customers:[], orders:[], journeys:[],
+  pendingCustomers:{}, view:'home', step:'channel', draft:null, lastOrder:null,
+  q:{cust:'',prod:'',orders:'',customers:'',cat:'',bulk:''}, cat:'', custAll:false,
+  orderFilter:'all', custFilter:'all', catSeg:'restaurant', placing:false,
+  bulk:{edits:{}, sel:{}, cat:'', only:false, saving:false},
+  jf:{member:'all', status:'all'}, jform:{}, loginFails:0, lockUntil:0
+};
+const role = () => S.me ? S.me.role : null;
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = v => String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const up = v => String(v==null?'':v).trim().toUpperCase();
+const money = n => (Number(n)||0).toLocaleString('en-US',{style:'currency',currency:'USD'});
+const num = v => { const n = parseFloat(String(v).replace(/[^0-9.\-]/g,'')); return isFinite(n)?n:0; };
+const mi = n => (Math.round((Number(n)||0)*10)/10).toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1});
+const initials = s => String(s||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?';
+const fmtDate = t => t ? new Date(t).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+const fmtDT = t => t ? new Date(t).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : '';
+const fmtTime = t => t ? new Date(t).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) : '';
+const dur = m => { m=Math.max(0,Math.round(m||0)); const h=Math.floor(m/60); return h?`${h}h ${m%60}m`:`${m}m`; };
+const startOfDay = (d=new Date()) => new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
+const startOfMonth = () => { const d=new Date(); return new Date(d.getFullYear(),d.getMonth(),1).getTime(); };
+const toLocalInput = t => { if(!t) return ''; const d=new Date(t); const p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; };
+const skuId = sku => 'p-' + String(sku).trim().toLowerCase().replace(/[^a-z0-9_\-.~:@+]/g,'-').slice(0,150);
+const IMGC={}, IMGP={};
+const imgTag = p => p && p.imageId ? `<img alt="" data-img="${esc(p.imageId)}"${IMGC[p.imageId]?` src="${IMGC[p.imageId]}"`:''}>` : '';
+function hydrateImages(root){ (root||document).querySelectorAll('img[data-img]:not([src])').forEach(img=>{ const id=img.dataset.img;
+  if(IMGC[id]){ img.src=IMGC[id]; return; }
+  if(!IMGP[id]) IMGP[id]=S.db.collection('productImages').doc(id).get().then(d=>{ const v=d.exists&&d.data().data; if(v&&/^data:image\//.test(v)) IMGC[id]=v; return IMGC[id]; }).catch(()=>null);
+  IMGP[id].then(v=>{ if(v) img.src=v; else img.remove(); }); }); }
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true,2800); }
+function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function nameOf(id){ const a=S.accounts[id]; return a ? a.name : (id?'SALESPERSON':'—'); }
+function getCustomer(id){ return S.customers.find(c=>c.id===id) || S.pendingCustomers[id] || null; }
+function productsFor(ch){ return S.products.filter(p=>p.active!==false && (p.channels||[]).includes(ch)); }
+const hasStock = p => !(p.stock===null || p.stock===undefined || p.stock==='');
+function stockPill(p){
+  if(!hasStock(p)) return '';
+  const s=Number(p.stock);
+  if(s<=0) return '<span class="pill st-out">Out of stock</span>';
+  if(s<=(Number(p.lowAt)||10)) return `<span class="pill st-low">Low: ${s}</span>`;
+  return `<span class="pill st-ok">${s} in stock</span>`;
+}
+async function withRetry(fn){ try{ return await fn(); }catch(e){ if(e&&e.code==='unavailable'){ await new Promise(r=>setTimeout(r,600+Math.random()*600)); return fn(); } throw e; } }
+function writeErr(e, what){
+  const c=e&&e.code;
+  if(c==='permission-denied'||c==='invalid_argument') return what==='admin'?'Only an admin can change this.':'You are not allowed to change this. Ask the admin.';
+  if(c==='resource-exhausted'||c==='quota_exceeded') return 'Storage is full. Contact the admin.';
+  if(c==='unauthenticated') return 'You were signed out. Sign in again.';
+  return 'Could not save. Check your connection and try again.';
+}
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+async function commit(p){ return Promise.race([p.then(v=>v==='queued'?'queued':'ok'),sleep(6000).then(()=>'queued')]); }
+async function pool(items, n, fn){ const q=[...items]; await Promise.all(Array.from({length:n},async()=>{ while(q.length){ await fn(q.shift()); } })); }
+
+/* ---------- units, pack, pricing ---------- */
+const UNITS=['LB','KG','G','OZ','L','ML','PC'];
+const UNIT_RX='(LBS?|KGS?|GRAMS?|GMS?|G|OZ|LTRS?|L|ML|PCS?)';
+function normU(u){ u=String(u||'').toUpperCase(); if(/^LB/.test(u)) return 'LB'; if(/^KG/.test(u)) return 'KG'; if(/^(G|GM|GRAM)/.test(u)) return 'G'; if(u==='OZ') return 'OZ'; if(/^(L|LTR)S?$/.test(u)) return 'L'; if(u==='ML') return 'ML'; if(/^PC/.test(u)) return 'PC'; return 'LB'; }
+function parsePack(t){ t=up(t); if(!t) return null; let m;
+  if((m=t.match(new RegExp('^(\\d+(?:\\.\\d+)?)\\s*[X×*]\\s*(\\d+(?:\\.\\d+)?)\\s*'+UNIT_RX+'\\b')))) return {pcs:+m[1],unitQty:+m[2],unit:normU(m[3])};
+  if((m=t.match(new RegExp('^(\\d+(?:\\.\\d+)?)\\s*'+UNIT_RX+'\\s*[X×*]\\s*(\\d+(?:\\.\\d+)?)')))) return {pcs:+m[3],unitQty:+m[1],unit:normU(m[2])};
+  if((m=t.match(new RegExp('^(\\d+(?:\\.\\d+)?)\\s*'+UNIT_RX+'\\b')))) return {pcs:1,unitQty:+m[1],unit:normU(m[2])};
+  return null; }
+function struct(p){ if(p.unitQty!=null||p.pcs!=null) return {unitQty:p.unitQty==null?null:Number(p.unitQty),unit:p.unit||'LB',pcs:p.pcs==null?null:Number(p.pcs)}; return parsePack(p.pack)||{unitQty:null,unit:'LB',pcs:null}; }
+const trimN = n => String(Math.round(n*100)/100);
+function packText(st,fallback){ return st && st.unitQty && st.pcs ? `${trimN(st.pcs)} X ${trimN(st.unitQty)} ${st.unit}` : (fallback||''); }
+function caseWt(st){ if(!st||!st.unitQty||!st.pcs||st.unit==='PC') return null; let t=st.unitQty*st.pcs, u=st.unit;
+  if(u==='G'&&t>=1000){t/=1000;u='KG';} else if(u==='OZ'&&t>=16){t/=16;u='LB';} else if(u==='ML'&&t>=1000){t/=1000;u='L';} return {qty:Math.round(t*100)/100,unit:u,text:trimN(t)+' '+u}; }
+function toLb(w){ if(!w) return 0; return {LB:1,KG:2.20462,G:0.00220462,OZ:1/16}[w.unit]*w.qty||0; }
+const packOf = p => packText(struct(p), p.pack);
+const cwOf = p => { const w=caseWt(struct(p)); return w?w.text:''; };
+function priceFor(p,cid){ const cp=cid&&p.customerPrices?p.customerPrices[cid]:null; return cp!=null&&cp!==''?Number(cp):(Number(p.price)||0); }
+const hasSpecial = (p,cid) => !!(cid&&p.customerPrices&&p.customerPrices[cid]!=null&&p.customerPrices[cid]!=='');
+const COMPANY_DEFAULT={name:'SEAWAYS EXIM LLC',tagline:'GLOBAL TRADE',address:'15633 JULIES WAY, ORLAND PARK, ILLINOIS 60462, UNITED STATES',phone:'+1 (708) 240-3612',email:'info@seawaysexim.com'};
+const company = () => ({...COMPANY_DEFAULT,...(S.app.company||{})});
+function visibleCustomers(){ if(role()==='admin') return S.customers; const me=S.me.id; return S.customers.filter(c=>c.createdBy===me||(c.assignedTo||[]).includes(me)).concat(Object.values(S.pendingCustomers).filter(c=>c.createdBy===me && !S.customers.some(x=>x.id===c.id))); }
+
+/* ---------- passwords (PBKDF2) ---------- */
+const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const unb64 = s => Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function hashPw(pw, salt){
+  const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);
+  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt:unb64(salt),iterations:150000,hash:'SHA-256'},key,256);
+  return b64(bits);
+}
+async function makeCred(pw){ const salt=b64(crypto.getRandomValues(new Uint8Array(16))); return {salt, hash:await hashPw(pw,salt)}; }
+const activeAccounts = () => Object.values(S.accounts).filter(a=>a.active!==false);
+
+/* ---------- draft ---------- */
+const draftKey = () => 'sw_draft_' + (S.me?S.me.id:'anon');
+function newDraft(ch){ return {channel:ch||null, customerId:null, customer:null, lines:{}, prices:{}, notes:'', deliveryDate:''}; }
+function saveDraft(){ lsSet(draftKey(), S.draft); }
+function draftCount(){ return Object.values(S.draft&&S.draft.lines||{}).reduce((a,b)=>a+b,0); }
+function draftLines(){ const out=[]; for(const [pid,qty] of Object.entries(S.draft.lines||{})){ if(qty>0){ const p=S.products.find(x=>x.id===pid); if(p) out.push({p,qty}); } } return out; }
+function linePrice(p){ const o=S.draft.prices&&S.draft.prices[p.id]; return o!=null&&o!==''?Number(o):priceFor(p,S.draft.customerId); }
+function isAdjusted(p){ const o=S.draft.prices&&S.draft.prices[p.id]; return o!=null&&o!==''&&Math.abs(Number(o)-priceFor(p,S.draft.customerId))>0.004; }
+const minOf = p => p.minPrice!=null&&p.minPrice!==''?Number(p.minPrice):null;
+function belowMin(p){ const m=minOf(p); return m!=null && linePrice(p)<m-0.004; }
+function draftTotal(){ return draftLines().reduce((a,{p,qty})=>a+qty*linePrice(p),0); }
+function setQty(pid,q){ q=Math.max(0,Math.min(99999,Math.round(q)||0)); if(q) S.draft.lines[pid]=q; else delete S.draft.lines[pid]; saveDraft(); }
+function stepQty(pid,d){ const p=S.products.find(x=>x.id===pid); const moq=Math.max(1,Number(p&&p.moq)||1); const cur=S.draft.lines[pid]||0;
+  let n = d>0 ? (cur? cur+1 : moq) : (cur-1<moq ? 0 : cur-1); setQty(pid,n); }
+
+/* ---------- journeys helpers ---------- */
+const myActiveJourney = () => S.me && S.journeys.find(j=>j.memberId===S.me.id && j.status==='active');
+function jOrders(j){ const end=j.endAt||Date.now(); return S.orders.filter(o=>o.createdBy===j.memberId && o.createdAt>=j.startAt && o.createdAt<=end && o.status!=='cancelled'); }
+function jStats(list){ const done=list.filter(j=>j.status!=='active'); const miles=done.reduce((a,j)=>a+(Number(j.distance)||0),0); const mins=done.reduce((a,j)=>a+(Number(j.durationMin)||0),0);
+  return {miles, trips:list.length, hours:mins/60, avg: done.length?miles/done.length:0, pending:list.filter(j=>j.status==='pending').length}; }
+async function compressToDataURL(file){
+  const bmp=await createImageBitmap(file);
+  for(const [m,q] of [[1100,.62],[850,.55],[650,.5],[480,.45]]){
+    const s=Math.min(1,m/Math.max(bmp.width,bmp.height)); const c=document.createElement('canvas'); c.width=Math.round(bmp.width*s); c.height=Math.round(bmp.height*s);
+    c.getContext('2d').drawImage(bmp,0,0,c.width,c.height); const d=c.toDataURL('image/jpeg',q); if(d.length<230000) return d; }
+  throw new Error('too big');
+}
+function getGeo(){ return new Promise((res,rej)=>{ if(!navigator.geolocation) return rej(new Error('no')); navigator.geolocation.getCurrentPosition(p=>res({lat:+p.coords.latitude.toFixed(5),lng:+p.coords.longitude.toFixed(5),acc:Math.round(p.coords.accuracy)}),rej,{enableHighAccuracy:true,timeout:12000,maximumAge:60000}); }); }
+const mapLink = g => g ? `<a href="https://www.google.com/maps?q=${g.lat},${g.lng}" target="_blank" rel="noopener" class="linkbtn small">Map</a>` : '';
+
+/* ---------- navigation ---------- */
+function navItems(){
+  return role()==='admin'
+    ? [['dashboard','Dashboard',I.dash],['orders','Orders',I.orders],['order','New order',I.plus],['catalog','Catalog',I.box],['bulk','Bulk edit',I.sliders],['customers','Customers',I.users],['journeys','Journeys',I.route],['team','Team',I.team]]
+    : [['order','New order',I.plus],['orders','My orders',I.orders],['catalog','Catalog',I.box],['journey','Journeys',I.route],['customers','Customers',I.users]];
+}
+function go(view){
+  S.view=view;
+  if(view==='order'){
+    if(!S.draft) S.draft=newDraft();
+    if(S.step==='done'){ S.draft=newDraft(); saveDraft(); }
+    S.step = !S.draft.channel ? 'channel' : !S.draft.customerId ? 'customer' : 'catalog';
+  }
+  render(); window.scrollTo(0,0);
+}
+function renderNav(){
+  const items=navItems();
+  const btn=([v,l,ic])=>`<button data-a="nav" data-v="${v}" class="${S.view===v?'on':''}">${ic}<span>${l}</span></button>`;
+  $('#sidenav').innerHTML=items.map(btn).join('');
+  if(role()==='admin'){ const main=['dashboard','orders','catalog','journeys']; const inMore=!main.includes(S.view);
+    $('#bottomnav').innerHTML=items.filter(i=>main.includes(i[0])).map(btn).join('')+`<button data-a="more" class="${inMore?'on':''}">${I.more}<span>More</span></button>`; }
+  else $('#bottomnav').innerHTML=items.map(btn).join('');
+  $('#sidefoot').innerHTML = `<div style="text-transform:uppercase">${esc(S.me.name)}</div><div style="opacity:.7">${role()==='admin'?'Admin':'Salesperson'}</div><div class="row" style="gap:6px;margin-top:4px"><button class="rolepill" data-a="changePw">Change password</button><button class="rolepill" data-a="signOut">Sign out</button></div>`;
+  $('#whoami').innerHTML=`<span class="who" style="text-transform:uppercase">${esc(S.me.name)}</span>`;
+  $('#rolepill').hidden=false; $('#rolepill').textContent='Sign out';
+}
+
+/* ---------- auth screens ---------- */
+function authScreen(html){ document.body.classList.add('authmode'); $('#authroot').innerHTML=`<div class="authwrap"><div class="authcard"><div class="brand"><b>Seaways Exim</b><span>Order desk</span></div>${html}</div></div>`; $('#approot').hidden=true; $('#bottomnav').hidden=true; }
+function showApp(){ $('#authroot').innerHTML=''; $('#approot').hidden=false; $('#bottomnav').hidden=false; }
+function renderAuth(){
+  if(S.bootstrapped===null){ authScreen('<p class="muted">Loading…</p>'); return; }
+  if(!S.bootstrapped){
+    authScreen(`<h2>Create the admin login</h2><p class="muted small" style="margin:6px 0 16px">First-time setup. This is your admin account. You'll add salespeople from the Team page afterwards.</p>
+      <form class="stack" id="setupForm" onsubmit="return false"><label class="f">Your name<input class="input" name="name" required></label><label class="f">Username<span class="hint">Letters and numbers, no spaces</span><input class="input nocaps" name="username" autocapitalize="none" autocomplete="username" required></label>
+      <label class="f">Password<span class="hint">At least 6 characters</span><input class="input" type="password" name="pw" autocomplete="new-password" required></label><label class="f">Repeat password<input class="input" type="password" name="pw2" autocomplete="new-password" required></label>
+      <div class="err" id="autherr"></div><button class="btn block" data-a="setupAdmin">Create admin login</button></form>`); return;
+  }
+  authScreen(`<h2>Sign in</h2><p class="muted small" style="margin:6px 0 16px">Use the username and password your admin gave you.</p>
+    <form class="stack" id="loginForm" onsubmit="return false"><label class="f">Username<input class="input nocaps" name="username" autocapitalize="none" autocomplete="username" required></label>
+    <label class="f">Password<input class="input" type="password" name="pw" autocomplete="current-password" required></label><div class="err" id="autherr">${esc(S.authMsg||'')}</div>
+    <button class="btn block" data-a="login">Sign in</button></form>`);
+  setTimeout(()=>{ const n=$('#authroot input'); n&&n.focus(); },30);
+}
+function refreshSession(){
+  if(!S.me){ renderAuth(); return; }
+  showApp(); render();
+}
+/* ---------- render ---------- */
+function render(){
+  if(!S.ready || !S.me) return;
+  renderNav();
+  const a=document.activeElement, fid=a&&a.id&&$('#main').contains(a)?a.id:null;
+  let ss=null,se=null; try{ ss=a.selectionStart; se=a.selectionEnd; }catch(e){}
+  let html='';
+  if(S.readOnly) html+=`<div class="notice" style="margin-bottom:14px">You have view-only access to this page. Ask the admin to share it with you as a Contributor so you can save.</div>`;
+  const V={home:viewHome,dashboard:viewDashboard,order:viewOrder,orders:viewOrders,customers:viewCustomers,catalog:viewCatalog,bulk:viewBulk,journey:viewJourney,journeys:viewJourneys,team:viewTeam};
+  html+=(V[S.view]||viewHome)();
+  $('#main').innerHTML=html;
+  if(fid){ const n=document.getElementById(fid); if(n){ n.focus({preventScroll:true}); try{ if(ss!=null) n.setSelectionRange(ss,se); }catch(e){} } }
+  hydrateImages($('#main')); tick();
+}
+function tick(){ document.querySelectorAll('[data-since]').forEach(el=>el.textContent=dur((Date.now()-Number(el.dataset.since))/60000)); }
+setInterval(tick,30000);
+
+/* ---------- home (salesperson) ---------- */
+function doors(){
+  return `<div class="doors">${['restaurant','grocery'].map(ch=>{
+    const pc=productsFor(ch).length, cc=S.customers.filter(c=>c.type===ch).length;
+    return `<button class="door" data-a="startOrder" data-ch="${ch}"><span class="ic">${CH[ch].icon}</span><div><h2>${CH[ch].label}</h2><p class="muted small" style="margin-top:4px">Start a ${ch==='restaurant'?'restaurant':'grocery store'} order</p></div><div class="meta">${pc} products, ${cc} customers</div></button>`;
+  }).join('')}</div>`;
+}
+function resumeCard(){
+  if(!S.draft || !draftCount()) return '';
+  const c=getCustomer(S.draft.customerId)||S.draft.customer;
+  return `<div class="card pad row between wrap" style="margin-top:14px;border-color:var(--gold)"><div><h3>Order in progress</h3><p class="muted small" style="text-transform:uppercase">${esc(c?c.name:'No customer yet')}, ${draftCount()} items, ${money(draftTotal())}</p></div><div class="row"><button class="btn ghost sm" data-a="discardDraft">Discard</button><button class="btn sm" data-a="resume">Continue order</button></div></div>`;
+}
+function journeyBanner(){
+  const j=myActiveJourney();
+  if(j) return `<div class="card pad row between wrap" style="margin-bottom:16px;border-color:var(--ok)"><div><h3><span class="dot"></span>Journey running</h3><p class="muted small">Started ${fmtTime(j.startAt)} from <span style="text-transform:uppercase">${esc(j.startPlace)}</span>, <span data-since="${j.startAt}"></span> on the road</p></div><button class="btn sm" data-a="nav" data-v="journey">End journey</button></div>`;
+  const today=S.journeys.some(x=>x.memberId===S.me.id && x.startAt>=startOfDay());
+  return today?'':`<div class="card pad row between wrap" style="margin-bottom:16px"><div><h3>Heading out?</h3><p class="muted small">Log your odometer before you drive.</p></div><button class="btn sm" data-a="nav" data-v="journey">${I.route} Start journey</button></div>`;
+}
+function greet(){ const hr=new Date().getHours(); return `${hr<12?'Good morning':hr<17?'Good afternoon':'Good evening'}, <span style="text-transform:uppercase">${esc(S.me.name.split(' ')[0])}</span>`; }
+function todayBlock(){ const today=S.orders.filter(o=>o.createdBy===S.me.id && o.createdAt>=startOfDay());
+  return `<div class="row between" style="margin:26px 0 10px"><h2>Today</h2><span class="muted small">${today.length} orders, ${money(today.reduce((a,o)=>a+(o.total||0),0))}</span></div>${orderList(today.slice(0,8),'No orders yet today.')}`; }
+function viewHome(){
+  const mine=S.orders.filter(o=>o.createdBy===S.me.id);
+  const today=mine.filter(o=>o.createdAt>=startOfDay());
+  const hr=new Date().getHours(); const g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+  return `<div class="pagehead"><div><h1>${g}, <span style="text-transform:uppercase">${esc(S.me.name.split(' ')[0])}</span></h1><p class="muted">Where are you visiting? Pick the store type to open its catalog.</p></div></div>
+  ${journeyBanner()}${doors()}${resumeCard()}
+  <div class="row between" style="margin:26px 0 10px"><h2>Today</h2><span class="muted small">${today.length} orders, ${money(today.reduce((a,o)=>a+(o.total||0),0))}</span></div>
+  ${orderList(today.slice(0,8),'No orders yet today. Start one above.')}`;
+}
+
+/* ---------- dashboard (admin) ---------- */
+function viewDashboard(){
+  const t0=startOfDay(), m0=startOfMonth();
+  const live=S.orders.filter(o=>o.status!=='cancelled');
+  const today=live.filter(o=>o.createdAt>=t0), month=live.filter(o=>o.createdAt>=m0);
+  const fresh=S.orders.filter(o=>o.status==='new');
+  const js=jStats(S.journeys.filter(j=>j.startAt>=m0));
+  const low=S.products.filter(p=>p.active!==false && hasStock(p) && Number(p.stock)<=(Number(p.lowAt)||10)).sort((a,b)=>a.stock-b.stock).slice(0,8);
+  const recentJ=S.journeys.slice(0,5);
+  return `<div class="pagehead"><div><h1>Dashboard</h1><p class="muted">${new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</p></div><button class="btn" data-a="nav" data-v="order">${I.plus} New order</button></div>
+  <div class="stats">
+    <div class="card stat"><div class="l">Orders today</div><div class="v">${today.length}</div><div class="small muted">${money(today.reduce((a,o)=>a+(o.total||0),0))}</div></div>
+    <div class="card stat"><div class="l">Awaiting confirmation</div><div class="v">${fresh.length}</div></div>
+    <div class="card stat"><div class="l">Revenue this month</div><div class="v">${money(month.reduce((a,o)=>a+(o.total||0),0))}</div></div>
+    <div class="card stat"><div class="l">Miles this month</div><div class="v">${mi(js.miles)} mi</div><div class="small muted">${js.pending} trips to verify</div></div>
+  </div>
+  ${!S.products.length?`<div class="card pad row between wrap" style="margin-bottom:18px;border-color:var(--gold)"><div><h3>Set up your catalog first</h3><p class="muted small">Import a CSV or add products one by one. Salespeople see them right away.</p></div><button class="btn" data-a="nav" data-v="catalog">Open catalog</button></div>`:''}
+  <div style="display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+    <div><div class="row between" style="margin-bottom:10px"><h2>New orders</h2><button class="linkbtn" data-a="nav" data-v="orders">All orders</button></div>${orderList(fresh.slice(0,6),'No new orders waiting.')}</div>
+    <div><div class="row between" style="margin-bottom:10px"><h2>Low stock</h2><button class="linkbtn" data-a="nav" data-v="bulk">Bulk edit</button></div>
+    ${low.length?`<div class="card list">${low.map(p=>`<button class="li" data-a="editProduct" data-id="${esc(p.id)}"><span class="grow"><div class="t">${esc(p.name)}</div></span><span style="font-weight:700;color:${Number(p.stock)<=0?'var(--bad)':'var(--warn)'}">${Number(p.stock)} left</span></button>`).join('')}</div>`:`<div class="card empty">Nothing low right now.</div>`}</div>
+    <div><div class="row between" style="margin-bottom:10px"><h2>Recent journeys</h2><button class="linkbtn" data-a="nav" data-v="journeys">All journeys</button></div>
+    ${recentJ.length?`<div class="card list">${recentJ.map(j=>`<button class="li" data-a="openJourney" data-id="${esc(j.id)}"><span class="avatar">${I.route.replace('<svg','<svg style="width:18px;height:18px"')}</span><span class="grow"><div class="t">${esc(nameOf(j.memberId))}</div><div class="s">${fmtDate(j.startAt)}</div></span><span style="text-align:right"><div style="font-weight:700">${j.status==='active'?'<span class="pill s-active">Active</span>':mi(j.distance)+' mi'}</div><div class="small muted">${j.status==='active'?'':dur(j.durationMin)}</div></span></button>`).join('')}</div>`:`<div class="card empty">No journeys logged yet.</div>`}</div>
+  </div>`;
+}
+
+/* ---------- order list ---------- */
+function orderList(list, emptyMsg){
+  if(!list.length) return `<div class="card empty">${esc(emptyMsg)}</div>`;
+  return `<div class="card list">${list.map(o=>`<button class="li" data-a="openOrder" data-id="${esc(o.id)}"><span class="avatar">${esc(initials(o.customer&&o.customer.name))}</span><span class="grow"><div class="t">${esc(o.customer&&o.customer.name)}</div><div class="s">${esc(o.number)}, ${fmtDT(o.createdAt)}${role()==='admin'?', '+esc(nameOf(o.createdBy)):''}</div></span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="amt">${money(o.total)}</span>${o.priceAdjusted&&role()==='admin'?'<span class="pill st-low">Price changed</span>':''}<span class="pill s-${esc(o.status)}">${esc(statusLabel(o.status))}</span></span></button>`).join('')}</div>`;
+}
+
+/* ---------- order flow ---------- */
+function stepsBar(n){ return `<div class="steps">${[1,2,3].map(i=>`<span class="${i<=n?'on':''}"></span>`).join('')}</div>`; }
+function viewOrder(){
+  const d=S.draft, st=S.step;
+  if(st==='done') return viewDone();
+  if(st==='channel' || !d.channel) return `<div class="pagehead"><div><h1>${role()==='admin'?'New order':greet()}</h1><p class="muted">Choose the type of store you are visiting.</p></div></div>${role()==='sales'?journeyBanner():''}${doors()}${resumeCard()}${role()==='sales'?todayBlock():''}`;
+  if(st==='customer' || !d.customerId) return viewPickCustomer();
+  if(st==='review') return viewReview();
+  return viewShop();
+}
+function viewPickCustomer(){
+  const d=S.draft, q=S.q.cust.trim().toLowerCase();
+  let list=visibleCustomers().filter(c=>S.custAll || c.type===d.channel);
+  if(q) list=list.filter(c=>[c.name,c.contact,c.phone,c.city,c.address].join(' ').toLowerCase().includes(q));
+  list.sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+  return `${stepsBar(1)}<div class="pagehead"><div><p class="muted small">${CH[d.channel].label} order, step 1 of 3</p><h1>Choose customer</h1></div><div class="row wrap"><button class="btn ghost" data-a="changeChannel">Change store type</button><button class="btn" data-a="newCustomer" data-ch="${d.channel}">${I.plus} New customer</button></div></div>
+  <div class="stack">
+    <div class="search">${I.search}<input class="input" id="custSearch" data-in="q" data-k="cust" placeholder="Search by name, phone or city" value="${esc(S.q.cust)}" autocomplete="off"></div>
+    <label class="row small muted" style="gap:8px;cursor:pointer"><input type="checkbox" class="cb" data-in="custAll" ${S.custAll?'checked':''}> Show ${d.channel==='restaurant'?'grocery stores':'restaurants'} too</label>
+    ${list.length?`<div class="card list">${list.slice(0,200).map(c=>`<button class="li" data-a="pickCustomer" data-id="${esc(c.id)}"><span class="avatar">${esc(initials(c.name))}</span><span class="grow"><div class="t">${esc(c.name)}</div><div class="s">${esc([c.contact,c.phone,c.city].filter(Boolean).join(', '))||(CH[c.type]?CH[c.type].label:'')}</div></span><span class="muted small">Select</span></button>`).join('')}</div>`
+    :`<div class="card empty"><h3>${q?'No match for “'+esc(up(S.q.cust))+'”':'No '+(d.channel==='restaurant'?'restaurants':'grocery stores')+' yet'}</h3><p style="margin-bottom:14px">Add them now. You'll go straight to the catalog after saving.</p><button class="btn" data-a="newCustomer" data-ch="${d.channel}" data-name="${esc(S.q.cust)}">${I.plus} Add new customer</button></div>`}
+  </div>`;
+}
+function custBar(){
+  const d=S.draft, c=getCustomer(d.customerId)||d.customer||{};
+  return `<div class="card custbar"><span class="avatar">${esc(initials(c.name))}</span><div class="grow"><div style="font-weight:600">${esc(c.name||'Customer')}</div><div class="muted small">${CH[d.channel].label}${c.city?', '+esc(c.city):''}</div></div><button class="btn ghost sm" data-a="changeCustomer">Change</button></div>`;
+}
+function viewShop(){
+  const d=S.draft; const all=productsFor(d.channel);
+  const cats=[...new Set(all.map(p=>p.category).filter(Boolean))].sort();
+  const q=S.q.prod.trim().toLowerCase();
+  let list=all;
+  if(S.cat) list=list.filter(p=>p.category===S.cat);
+  if(q) list=list.filter(p=>[p.name,p.sku,p.category,p.pack].join(' ').toLowerCase().includes(q));
+  list=[...list].sort((a,b)=>String(a.category||'').localeCompare(String(b.category||''))||String(a.name).localeCompare(String(b.name)));
+  const n=draftCount();
+  return `${stepsBar(2)}${custBar()}
+  <div class="stack" style="gap:10px">
+    <div class="search">${I.search}<input class="input" id="prodSearch" data-in="q" data-k="prod" placeholder="Search ${CH[d.channel].label.toLowerCase()} catalog" value="${esc(S.q.prod)}" autocomplete="off"></div>
+    ${cats.length>1?`<div class="chips"><button class="chip ${!S.cat?'on':''}" data-a="cat" data-c="">ALL</button>${cats.map(c=>`<button class="chip ${S.cat===c?'on':''}" data-a="cat" data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div>`:''}
+  </div>
+  <div style="margin-top:12px">
+  ${!all.length?`<div class="card empty"><h3>No ${CH[d.channel].label.toLowerCase()} products yet</h3><p>${role()==='admin'?'Add products in Catalog and tick “'+CH[d.channel].label+'”.':'Ask the admin to add products to this catalog.'}</p></div>`
+   :!list.length?`<div class="card empty">No products match.</div>`
+   :`<div class="pgrid">${list.slice(0,240).map(productCard).join('')}</div>${list.length>240?`<p class="muted small" style="margin-top:10px">Showing 240 of ${list.length}. Search to narrow down.</p>`:''}`}
+  </div>
+  ${n?`<div class="cartbar"><span>${I.cart}</span><div class="grow"><div class="small" style="opacity:.8">${n} items</div><b>${money(draftTotal())}</b></div><button class="btn" data-a="review">Review order</button></div>`:''}`;
+}
+function productCard(p){
+  const q=S.draft.lines[p.id]||0; const moq=Number(p.moq)||1; const cid=S.draft.customerId; const sp=hasSpecial(p,cid);
+  return `<div class="pcard ${q?'in':''}"><div class="pimg">${imgTag(p)||`<span class="ph">${esc(initials(p.name))}</span>`}</div>
+  <div class="pbody"><div class="pname">${esc(p.name)}</div><div class="pmeta">${esc([packOf(p),cwOf(p)?'= '+cwOf(p):'',p.sku].filter(Boolean).join(', '))}${moq>1?`, MOQ ${moq}`:''}</div>${stockPill(p)}<div class="pprice">${money(priceFor(p,cid))}${sp?` <span class="pill s-confirmed" title="Special price for this customer">Special</span> <s class="muted small" style="font-weight:400">${money(p.price)}</s>`:''}</div>
+  ${q?`<div class="stepper"><button data-a="qty" data-id="${esc(p.id)}" data-d="-1" aria-label="Less">−</button><input id="q_${esc(p.id)}" type="number" inputmode="numeric" min="0" data-in="qty" data-id="${esc(p.id)}" value="${q}" aria-label="Quantity"><button data-a="qty" data-id="${esc(p.id)}" data-d="1" aria-label="More">+</button></div>`
+     :`<button class="addbtn" data-a="qty" data-id="${esc(p.id)}" data-d="1">Add${moq>1?' '+moq:''}</button>`}
+  </div></div>`;
+}
+function viewReview(){
+  const d=S.draft, lines=draftLines();
+  const under=lines.filter(({p,qty})=>qty<(Number(p.moq)||1));
+  return `${stepsBar(3)}<div class="pagehead"><div><p class="muted small">Step 3 of 3</p><h1>Review order</h1></div><button class="btn ghost" data-a="backToShop">Add more items</button></div>
+  ${custBar()}
+  ${!lines.length?`<div class="card empty"><h3>No items yet</h3><button class="btn" data-a="backToShop">Open catalog</button></div>`:`
+  ${under.length?`<div class="notice" style="margin-bottom:12px">Below minimum order qty: ${under.map(({p})=>esc(p.name)+' (MOQ '+p.moq+')').join(', ')}</div>`:''}
+  <div class="card lines">${lines.map(({p,qty})=>`<div class="ln"><div><div style="font-weight:600;text-transform:uppercase">${esc(p.name)}</div><div class="muted small">${esc([packOf(p),p.sku].filter(Boolean).join(', '))}</div>
+  <div class="row wrap" style="gap:8px;margin-top:8px"><label class="row small" style="gap:6px">Price per case $<input class="cell w ${isAdjusted(p)?'chg':''}" style="${belowMin(p)?'border-color:var(--bad);background:var(--bad-soft)':''}" id="rp_${esc(p.id)}" inputmode="decimal" data-in="lprice" data-id="${esc(p.id)}" value="${linePrice(p).toFixed(2)}"></label>
+  ${isAdjusted(p)?`<span class="small muted">List ${money(priceFor(p,d.customerId))}, ${linePrice(p)<priceFor(p,d.customerId)?'−':'+'}${trimN(Math.abs(1-linePrice(p)/(priceFor(p,d.customerId)||1))*100)}% <button class="linkbtn small" data-a="resetPrice" data-id="${esc(p.id)}">Reset</button></span>`:''}
+  ${belowMin(p)?`<span class="small" style="color:var(--bad);font-weight:600">Lowest allowed is ${money(minOf(p))}</span>`:''}</div></div><div style="font-weight:700;text-align:right">${money(qty*linePrice(p))}</div>
+  <div class="stepper"><button data-a="qty" data-id="${esc(p.id)}" data-d="-1">−</button><input id="r_${esc(p.id)}" type="number" inputmode="numeric" min="0" data-in="qty" data-id="${esc(p.id)}" value="${qty}"><button data-a="qty" data-id="${esc(p.id)}" data-d="1">+</button></div><div style="text-align:right"><button class="linkbtn" style="color:var(--bad)" data-a="removeLine" data-id="${esc(p.id)}">Remove</button></div></div>`).join('')}
+  <div class="totals"><span>Total, ${draftCount()} items${(()=>{ const list=lines.reduce((a,{p,qty})=>a+qty*priceFor(p,d.customerId),0); const t=draftTotal(); return Math.abs(list-t)>0.004?`<div class="small muted">List total ${money(list)}, ${t<list?'discount':'increase'} ${money(Math.abs(list-t))}</div>`:''; })()}</span><b>${money(draftTotal())}</b></div></div>
+  <p class="small muted" style="margin-top:8px">Tap a price to change it for this customer. The office sees any change you make.</p>
+  <div class="card pad stack" style="margin-top:14px">
+    <label class="f">Delivery date <span class="hint">Optional</span><input class="input" type="date" id="dDate" data-in="draftField" data-k="deliveryDate" value="${esc(d.deliveryDate)}"></label>
+    <label class="f">Notes for the office <span class="hint">Optional</span><textarea class="input" id="dNotes" data-in="draftField" data-k="notes" placeholder="Payment terms, delivery instructions">${esc(d.notes)}</textarea></label>
+  </div>
+  <div class="row" style="margin-top:16px;justify-content:flex-end"><button class="btn block" style="max-width:360px;min-height:50px;font-size:16px" data-a="placeOrder" ${S.placing||S.readOnly?'disabled':''}>${S.placing?'Placing order…':'Place order, '+money(draftTotal())}</button></div>`}`;
+}
+function viewDone(){
+  const o=S.lastOrder||{};
+  return `<div class="card done"><div class="check">${I.check}</div><h1>Order placed</h1><p class="muted" style="margin:8px 0 4px;text-transform:uppercase">${esc(o.number)} for ${esc(o.customer&&o.customer.name)}</p><p style="font-weight:700;font-size:20px;margin-bottom:22px">${money(o.total)}</p>
+  <div class="row wrap" style="justify-content:center"><button class="btn ghost" data-a="nav" data-v="${role()==='admin'?'dashboard':'order'}">Back to home</button><button class="btn ghost" data-a="openOrder" data-id="${esc(o.id)}">View order</button><button class="btn" data-a="startOrder" data-ch="${esc(o.channel)}">Next ${o.channel==='restaurant'?'restaurant':'grocery'} order</button></div></div>`;
+}
+
+/* ---------- orders ---------- */
+function filteredOrders(){
+  let list = role()==='admin' ? S.orders : S.orders.filter(o=>o.createdBy===S.me.id);
+  if(S.orderFilter!=='all') list=list.filter(o=>o.status===S.orderFilter);
+  const q=S.q.orders.trim().toLowerCase();
+  if(q) list=list.filter(o=>[o.number,o.customer&&o.customer.name,nameOf(o.createdBy)].join(' ').toLowerCase().includes(q));
+  return list;
+}
+function viewOrders(){
+  const list=filteredOrders();
+  return `<div class="pagehead"><div><h1>${role()==='admin'?'Orders':'My orders'}</h1><p class="muted">${list.length} shown, ${money(list.filter(o=>o.status!=='cancelled').reduce((a,o)=>a+(o.total||0),0))}</p></div>
+  <div class="row">${role()==='admin'&&S.downloads?`<button class="btn ghost" data-a="exportOrders">Download CSV</button>`:''}<button class="btn" data-a="nav" data-v="order">${I.plus} New order</button></div></div>
+  <div class="stack" style="gap:10px;margin-bottom:12px">
+    <div class="search">${I.search}<input class="input" id="orderSearch" data-in="q" data-k="orders" placeholder="Search order number, customer${role()==='admin'?' or salesperson':''}" value="${esc(S.q.orders)}"></div>
+    <div class="chips">${[['all','All'],...STATUS].map(([k,l])=>`<button class="chip ${S.orderFilter===k?'on':''}" data-a="orderFilter" data-k="${k}">${l}</button>`).join('')}</div>
+  </div>${orderList(list.slice(0,300),'No orders here yet.')}`;
+}
+function openOrder(id){
+  const o=S.orders.find(x=>x.id===id) || (S.lastOrder&&S.lastOrder.id===id?S.lastOrder:null); if(!o) return;
+  const c=o.customer||{};
+  modal(`<div class="sh"><div><h2>${esc(o.number)}</h2><p class="muted small">${fmtDT(o.createdAt)}, by <span style="text-transform:uppercase">${esc(nameOf(o.createdBy))}</span></p></div><button class="x" data-a="close">×</button></div>
+  <div class="row between" style="margin-bottom:14px"><span class="pill s-${esc(o.status)}">${esc(statusLabel(o.status))}</span><span class="muted small">${CH[o.channel]?CH[o.channel].label:''}</span></div>
+  <dl class="kv"><dt>Customer</dt><dd><b>${esc(c.name)}</b></dd>${c.contact?`<dt>Contact</dt><dd>${esc(c.contact)}</dd>`:''}${c.phone?`<dt>Phone</dt><dd>${esc(c.phone)}</dd>`:''}${c.address||c.city?`<dt>Address</dt><dd>${esc([c.address,c.city].filter(Boolean).join(', '))}</dd>`:''}${o.deliveryDate?`<dt>Delivery</dt><dd>${esc(fmtDate(o.deliveryDate+'T12:00'))}</dd>`:''}${o.notes?`<dt>Notes</dt><dd>${esc(o.notes)}</dd>`:''}</dl>
+  <div class="card lines" style="margin-top:16px">${(o.lines||[]).map(l=>`<div class="ln"><div><div style="font-weight:600;text-transform:uppercase">${esc(l.name)}</div><div class="muted small">${esc([l.pack,l.sku].filter(Boolean).join(', '))}, ${l.qty} × ${money(l.price)}</div>${l.adjusted&&role()==='admin'?`<div class="small" style="color:var(--warn);font-weight:600">Price changed from ${money(l.basePrice)} by salesperson</div>`:''}</div><div style="font-weight:600">${money(l.qty*l.price)}</div></div>`).join('')}
+  <div class="totals"><span>Total</span><b>${money(o.total)}</b></div></div>
+  ${role()==='admin'?`<p class="small muted" style="margin:16px 0 8px">Update status</p><div class="row wrap">${STATUS.map(([k,l])=>`<button class="btn sm ${o.status===k?'':'ghost'}" data-a="setStatus" data-id="${esc(o.id)}" data-s="${k}">${l}</button>`).join('')}</div>`:''}
+  <div class="actions"><button class="btn ghost" data-a="reorder" data-id="${esc(o.id)}">Reorder same items</button><button class="btn gold" data-a="orderSheet" data-id="${esc(o.id)}">Order sheet</button>${role()==='admin'?`<button class="btn danger" data-a="deleteOrder" data-id="${esc(o.id)}">Delete</button>`:''}</div>`);
+}
+
+/* ---------- customers ---------- */
+function sheetData(o){
+  const cu={...(o.customer||{}),...(()=>{ const c=getCustomer(o.customerId); return c?{taxId:c.taxId,email:c.email}:{}; })()};
+  const lines=(o.lines||[]).map(l=>{ let cw=l.caseWt, lb=l.caseLb; if(cw==null){ const p=S.products.find(x=>x.id===l.pid); const w=p&&caseWt(struct(p)); cw=w?w.text:''; lb=w?toLb(w):0; } return {...l,caseWt:cw,caseLb:lb||0}; });
+  const cases=lines.reduce((a,l)=>a+l.qty,0), weight=lines.reduce((a,l)=>a+l.qty*(l.caseLb||0),0);
+  return {o,cu,lines,cases,weight,co:company()};
+}
+function sheetHTML(o){
+  const {cu,lines,cases,weight,co}=sheetData(o);
+  return `<div id="osheet" style="border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;color:#0F1D33;font-size:13px">
+  <div style="background:#14284A;color:#fff;padding:18px 20px;border-bottom:4px solid #A9843A;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div><div style="font-size:20px;font-weight:700;letter-spacing:.02em">${esc(co.name)}</div><div style="color:#D4B065;font-size:12px;font-weight:600">${esc(co.tagline)}</div><div style="font-size:12px;opacity:.85;margin-top:6px">${esc(co.address)}<br>${esc(co.phone)}, ${esc(co.email)}</div></div>
+    <div style="text-align:right"><div style="font-size:18px;font-weight:700">SALES ORDER</div><div style="font-size:12px;opacity:.9;margin-top:4px">No. ${esc(o.number)}<br>Date: ${fmtDate(o.createdAt)}<br>Salesperson: ${esc(up(nameOf(o.createdBy)))}</div></div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 20px;border-bottom:1px solid #DCE2EB">
+    <div><div style="font-size:11px;color:#5D6B80;font-weight:600">BILL TO / SHIP TO</div><div style="font-weight:700;font-size:15px;margin-top:4px">${esc(cu.name)}</div><div>${esc([cu.address,cu.city].filter(Boolean).join(', '))}</div><div>${esc([cu.contact,cu.phone].filter(Boolean).join(', '))}</div>${cu.email?`<div>${esc(cu.email)}</div>`:''}${cu.taxId?`<div>TAX ID: ${esc(cu.taxId)}</div>`:''}</div>
+    <div style="text-align:right"><div style="font-size:11px;color:#5D6B80;font-weight:600">DETAILS</div><div style="margin-top:4px">Type: ${esc(up(CH[o.channel]?CH[o.channel].label:''))}</div><div>Status: ${esc(up(statusLabel(o.status)))}</div>${o.deliveryDate?`<div>Delivery: ${esc(fmtDate(o.deliveryDate+'T12:00'))}</div>`:''}</div></div>
+  <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px"><thead><tr style="background:#F3F5F8;text-align:left">${['#','SKU','DESCRIPTION','PACK','CASE WT','QTY','PRICE','AMOUNT'].map((h,i)=>`<th style="padding:8px 10px;border-bottom:1px solid #DCE2EB;${i>=5?'text-align:right':''}">${h}</th>`).join('')}</tr></thead>
+  <tbody>${lines.map((l,i)=>`<tr><td style="padding:7px 10px;border-bottom:1px solid #EEF1F5">${i+1}</td><td style="padding:7px 10px;border-bottom:1px solid #EEF1F5">${esc(l.sku)}</td><td style="padding:7px 10px;border-bottom:1px solid #EEF1F5;font-weight:600">${esc(l.name)}</td><td style="padding:7px 10px;border-bottom:1px solid #EEF1F5">${esc(l.pack)}</td><td style="padding:7px 10px;border-bottom:1px solid #EEF1F5">${esc(l.caseWt||'')}</td><td style="padding:7px 10px;border-bottom:1px solid #EEF1F5;text-align:right">${l.qty}</td><td style="padding:7px 10px;border-bottom:1px solid #EEF1F5;text-align:right">${money(l.price)}</td><td style="padding:7px 10px;border-bottom:1px solid #EEF1F5;text-align:right;font-weight:600">${money(l.qty*l.price)}</td></tr>`).join('')}</tbody></table></div>
+  <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 20px">
+    <div style="font-size:12px;color:#5D6B80">Total cases: <b style="color:#0F1D33">${cases}</b>${weight?`<br>Total weight: <b style="color:#0F1D33">${trimN(weight)} LB</b> (${trimN(weight/2.20462)} KG)`:''}${o.notes?`<br>Notes: <span style="color:#0F1D33">${esc(o.notes)}</span>`:''}</div>
+    <div style="text-align:right"><div style="font-size:12px;color:#5D6B80">TOTAL (USD)</div><div style="font-size:22px;font-weight:700;border-top:2px solid #0F1D33;padding-top:4px">${money(o.total)}</div></div></div>
+  <div style="padding:10px 20px 16px;font-size:11px;color:#5D6B80;border-top:1px solid #DCE2EB">Prices in USD. This sales order is the basis for the proforma invoice. Goods subject to availability.</div></div>`;
+}
+async function sheetPDF(o){
+  const J=window.jspdf&&window.jspdf.jsPDF; if(!J) throw new Error('nopdf');
+  const {cu,lines,cases,weight,co}=sheetData(o);
+  const doc=new J({unit:'pt',format:'letter'}); const W=doc.internal.pageSize.getWidth(), M=40;
+  doc.setFillColor(20,40,74); doc.rect(0,0,W,96,'F'); doc.setFillColor(169,132,58); doc.rect(0,96,W,4,'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.text(co.name,M,38);
+  doc.setTextColor(212,176,101); doc.setFontSize(9); doc.text(co.tagline,M,52);
+  doc.setTextColor(230,235,242); doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.text(doc.splitTextToSize(co.address,300),M,66); doc.text(`${co.phone}   ${co.email}`,M,84);
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.text('SALES ORDER',W-M,38,{align:'right'});
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.text([`No. ${o.number}`,`Date: ${fmtDate(o.createdAt)}`,`Salesperson: ${up(nameOf(o.createdBy))}`],W-M,54,{align:'right'});
+  let y=124; doc.setTextColor(93,107,128); doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.text('BILL TO / SHIP TO',M,y); doc.text('DETAILS',W-M,y,{align:'right'});
+  doc.setTextColor(15,29,51); doc.setFontSize(11); doc.text(cu.name||'',M,y+15); doc.setFont('helvetica','normal'); doc.setFontSize(9);
+  const bl=[[cu.address,cu.city].filter(Boolean).join(', '),[cu.contact,cu.phone].filter(Boolean).join(', '),cu.email||'',cu.taxId?'TAX ID: '+cu.taxId:''].filter(Boolean);
+  doc.text(bl,M,y+29); doc.text([`Type: ${up(CH[o.channel]?CH[o.channel].label:'')}`,`Status: ${up(statusLabel(o.status))}`,o.deliveryDate?`Delivery: ${fmtDate(o.deliveryDate+'T12:00')}`:''].filter(Boolean),W-M,y+15,{align:'right'});
+  y+=29+bl.length*11+12;
+  doc.autoTable({startY:y,margin:{left:M,right:M},head:[['#','SKU','DESCRIPTION','PACK','CASE WT','QTY','PRICE','AMOUNT']],
+    body:lines.map((l,i)=>[i+1,l.sku,l.name,l.pack,l.caseWt||'',l.qty,money(l.price),money(l.qty*l.price)]),
+    styles:{fontSize:8.5,cellPadding:5,textColor:[15,29,51],lineColor:[220,226,235],lineWidth:.5},headStyles:{fillColor:[243,245,248],textColor:[93,107,128],fontStyle:'bold'},
+    columnStyles:{0:{cellWidth:22},2:{fontStyle:'bold'},5:{halign:'right'},6:{halign:'right'},7:{halign:'right',fontStyle:'bold'}}});
+  y=doc.lastAutoTable.finalY+20; if(y>680){ doc.addPage(); y=60; }
+  doc.setFontSize(9); doc.setTextColor(93,107,128); doc.text(`Total cases: ${cases}`,M,y); if(weight) doc.text(`Total weight: ${trimN(weight)} LB (${trimN(weight/2.20462)} KG)`,M,y+13);
+  if(o.notes) doc.text(doc.splitTextToSize('Notes: '+o.notes,300),M,y+(weight?26:13));
+  doc.setTextColor(93,107,128); doc.text('TOTAL (USD)',W-M,y,{align:'right'}); doc.setDrawColor(15,29,51); doc.setLineWidth(1.5); doc.line(W-M-160,y+6,W-M,y+6);
+  doc.setTextColor(15,29,51); doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.text(money(o.total),W-M,y+26,{align:'right'});
+  doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(93,107,128); doc.text('Prices in USD. This sales order is the basis for the proforma invoice. Goods subject to availability.',M,doc.internal.pageSize.getHeight()-30);
+  return doc.output('blob');
+}
+function viewCustomers(){
+  const q=S.q.customers.trim().toLowerCase(); const base=visibleCustomers();
+  let list=base; if(S.custFilter!=='all') list=list.filter(c=>c.type===S.custFilter);
+  if(q) list=list.filter(c=>[c.name,c.contact,c.phone,c.city,c.email].join(' ').toLowerCase().includes(q));
+  list=[...list].sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+  const who=c=>role()==='admin'?((c.assignedTo||[]).length?'Assigned: '+(c.assignedTo||[]).map(nameOf).join(', '):'Not assigned'):'';
+  return `<div class="pagehead"><div><h1>${role()==='admin'?'Customers':'My customers'}</h1><p class="muted">${base.filter(c=>c.type==='restaurant').length} restaurants, ${base.filter(c=>c.type==='grocery').length} grocery stores</p></div><button class="btn" data-a="newCustomer" data-ch="">${I.plus} Add customer</button></div>
+  <div class="stack" style="gap:10px;margin-bottom:12px">
+    <div class="search">${I.search}<input class="input" id="customersSearch" data-in="q" data-k="customers" placeholder="Search customers" value="${esc(S.q.customers)}"></div>
+    <div class="chips">${[['all','All'],['restaurant','Restaurants'],['grocery','Grocery stores']].map(([k,l])=>`<button class="chip ${S.custFilter===k?'on':''}" data-a="custFilter" data-k="${k}">${l}</button>`).join('')}</div>
+  </div>
+  ${list.length?`<div class="card list">${list.slice(0,400).map(c=>`<button class="li" data-a="openCustomer" data-id="${esc(c.id)}"><span class="avatar">${esc(initials(c.name))}</span><span class="grow"><div class="t">${esc(c.name)}</div><div class="s">${esc([CH[c.type]&&CH[c.type].label,c.contact,c.phone,c.city].filter(Boolean).join(', '))}</div>${role()==='admin'?`<div class="s" style="color:${(c.assignedTo||[]).length?'var(--muted)':'var(--warn)'}">${esc(who(c))}</div>`:''}</span></button>`).join('')}</div>`:`<div class="card empty">${role()==='admin'?'No customers yet.':'No customers assigned to you yet. Add one, or ask the admin to assign them.'}</div>`}`;
+}
+function customerForm(c, ch){
+  c=c||{}; const type=c.type||ch||'restaurant';
+  return `<form id="custForm" class="stack" onsubmit="return false">
+    <div class="seg2">${['restaurant','grocery'].map(t=>`<label><input type="radio" name="type" value="${t}" ${type===t?'checked':''}> ${CH[t].label}</label>`).join('')}</div>
+    <label class="f">Business name<input class="input" name="name" required value="${esc(c.name)}" autocomplete="off"></label>
+    <div class="grid2"><label class="f">Contact person<input class="input" name="contact" value="${esc(c.contact)}"></label><label class="f">Phone<input class="input" name="phone" type="tel" value="${esc(c.phone)}"></label></div>
+    <label class="f">Email<input class="input" name="email" type="email" value="${esc(c.email)}"></label>
+    <label class="f">Street address<input class="input" name="address" value="${esc(c.address)}"></label>
+    <div class="grid2"><label class="f">City<input class="input" name="city" value="${esc(c.city)}"></label><label class="f">Tax ID / resale no.<input class="input" name="taxId" value="${esc(c.taxId)}"></label></div>
+    <label class="f">Notes<textarea class="input" name="notes">${esc(c.notes)}</textarea></label>
+    ${role()==='admin'?`<div class="f" style="font-size:13.5px;font-weight:500">Assigned salespeople<span class="hint">They'll see this customer and can order for them</span><div class="stack" style="gap:6px;margin-top:6px">${Object.values(S.accounts).filter(a=>a.role==='sales'&&a.active!==false).map(a=>`<label class="row" style="gap:8px;font-weight:400;cursor:pointer"><input type="checkbox" class="cb" name="as_${esc(a.id)}" ${(c.assignedTo||[]).includes(a.id)?'checked':''}> <span style="text-transform:uppercase">${esc(a.name)}</span></label>`).join('')||'<span class="muted small">No salesperson logins yet. Add them on the Team page.</span>'}</div></div>`:''}
+  </form>`;
+}
+function readForm(id){ const f=document.getElementById(id); const o={}; new FormData(f).forEach((v,k)=>o[k]=String(v).trim()); return o; }
+function openCustomer(id){
+  const c=getCustomer(id); if(!c) return;
+  const ords=S.orders.filter(o=>o.customerId===id && (role()==='admin'||o.createdBy===S.me.id));
+  modal(`<div class="sh"><div class="row"><span class="avatar">${esc(initials(c.name))}</span><div><h2 style="text-transform:uppercase">${esc(c.name)}</h2><p class="muted small">${CH[c.type]?CH[c.type].label:''}</p></div></div><button class="x" data-a="close">×</button></div>
+  <dl class="kv">${['contact','phone','email','address','city','taxId','notes'].filter(k=>c[k]).map(k=>`<dt>${({contact:'Contact',phone:'Phone',email:'Email',address:'Address',city:'City',taxId:'Tax ID',notes:'Notes'})[k]}</dt><dd style="${k==='email'?'text-transform:none':''}">${esc(c[k])}</dd>`).join('')}</dl>
+  <h3 style="margin:18px 0 8px">Orders (${ords.length})</h3>${orderList(ords.slice(0,10),'No orders yet.')}
+  ${role()==='admin'?`<p class="small muted" style="margin-top:12px">Assigned to: ${esc((c.assignedTo||[]).map(nameOf).join(', ')||'nobody')}</p>`:''}
+  <div class="actions">${role()==='admin'?`<button class="btn danger" data-a="deleteCustomer" data-id="${esc(id)}">Delete</button>`:''}${role()==='admin'||c.createdBy===S.me.id?`<button class="btn ghost" data-a="editCustomer" data-id="${esc(id)}">Edit</button>`:''}<button class="btn" data-a="orderFor" data-id="${esc(id)}">Start order</button></div>`);
+}
+
+/* ---------- catalog ---------- */
+function viewCatalog(){
+  const q=S.q.cat.trim().toLowerCase();
+  const match=p=>!q||[p.name,p.sku,p.category,p.pack].join(' ').toLowerCase().includes(q);
+  const sortP=(a,b)=>String(a.category||'').localeCompare(String(b.category||''))||String(a.name).localeCompare(String(b.name));
+  const col=ch=>{ const all=S.products.filter(p=>(p.channels||[]).includes(ch) && (role()==='admin'||p.active!==false)); const list=all.filter(match).sort(sortP);
+    return `<div class="card col" data-hide="${S.catSeg===ch?0:1}"><div class="colhead"><h2><span class="ic">${CH[ch].icon}</span>${CH[ch].label}</h2><span class="muted small">${all.filter(p=>p.active!==false).length} live</span></div>
+    ${list.length?`<div class="list">${list.slice(0,400).map(catRow).join('')}</div>`:`<div class="empty">${all.length?'No match.':'No products in this catalog yet.'}</div>`}</div>`; };
+  const orphan=role()==='admin'?S.products.filter(p=>!(p.channels||[]).length).filter(match):[];
+  return `<div class="pagehead"><div><h1>Catalog</h1><p class="muted">${role()==='admin'?S.products.length+' products. Tick Restaurant, Grocery store, or both on each product.':'Browse only. To order, use New order.'}</p></div>
+  ${role()==='admin'?`<div class="row wrap"><button class="btn ghost" data-a="importCsv">Import CSV</button>${S.assets?`<button class="btn ghost" data-a="bulkPhotos">Upload photos</button>`:''}<button class="btn ghost" data-a="nav" data-v="bulk">Bulk edit</button><button class="btn" data-a="editProduct" data-id="">${I.plus} Add product</button></div>`:''}</div>
+  <div class="search" style="margin-bottom:12px">${I.search}<input class="input" id="catSearch" data-in="q" data-k="cat" placeholder="Search name, SKU or category" value="${esc(S.q.cat)}"></div>
+  <div class="segtoggle">${['restaurant','grocery'].map(ch=>`<button class="${S.catSeg===ch?'on':''}" data-a="catSeg" data-k="${ch}">${CH[ch].label}</button>`).join('')}</div>
+  <div class="board">${col('restaurant')}${col('grocery')}</div>
+  ${orphan.length?`<div class="card" style="margin-top:16px"><div class="colhead"><h2>Not in any catalog</h2><span class="muted small">Salespeople can't see these</span></div><div class="list">${orphan.map(catRow).join('')}</div></div>`:''}`;
+}
+function catRow(p){
+  return `<button class="li ${p.active===false?'off':''}" data-a="${role()==='admin'?'editProduct':'viewProduct'}" data-id="${esc(p.id)}"><span class="thumb">${imgTag(p)||esc(initials(p.name))}</span><span class="grow"><div class="t">${esc(p.name)}</div><div class="s">${esc([p.sku,packOf(p),cwOf(p),p.category].filter(Boolean).join(', '))}${p.active===false?', HIDDEN':''}</div></span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="amt">${money(p.price)}</span>${stockPill(p)}</span></button>`;
+}
+function viewProductModal(id){
+  const p=S.products.find(x=>x.id===id); if(!p) return;
+  modal(`<div class="sh"><h2 style="text-transform:uppercase">${esc(p.name)}</h2><button class="x" data-a="close">×</button></div>
+  ${p.imageId?`<div class="pimg" style="border-radius:10px;margin-bottom:14px">${imgTag(p)}</div>`:''}
+  <dl class="kv"><dt>SKU</dt><dd>${esc(p.sku)}</dd><dt>Category</dt><dd>${esc(p.category||'—')}</dd><dt>Pack</dt><dd>${esc(packOf(p)||'—')}</dd><dt>Case weight</dt><dd>${esc(cwOf(p)||'—')}</dd><dt>Price</dt><dd><b>${money(p.price)}</b> per case</dd><dt>MOQ</dt><dd>${Number(p.moq)||1}</dd><dt>Stock</dt><dd>${hasStock(p)?stockPill(p):'—'}</dd><dt>Catalogs</dt><dd>${(p.channels||[]).map(c=>CH[c].label).join(', ')}</dd></dl>`);
+}
+function productModal(id){
+  const p=id?S.products.find(x=>x.id===id):null; const x=p||{channels:[S.catSeg],active:true};
+  const cats=[...new Set(S.products.map(p=>p.category).filter(Boolean))].sort();
+  modal(`<div class="sh"><h2>${p?'Edit product':'Add product'}</h2><button class="x" data-a="close">×</button></div>
+  <form id="prodForm" class="stack" onsubmit="return false">
+    ${S.assets?`<div class="row" style="gap:14px"><span class="thumb" style="width:72px;height:72px;flex-basis:72px" id="pthumb">${imgTag(x)||esc(initials(x.name||'+'))}</span><div class="stack" style="gap:6px"><label class="btn ghost sm" style="cursor:pointer">${x.imageId?'Change photo':'Upload photo'}<input type="file" accept="image/*" id="pfile" hidden data-in="pfile"></label>${x.imageId?`<button type="button" class="linkbtn small" data-a="removePhoto">Remove photo</button>`:''}<span class="muted small" id="pfilename"></span></div></div>`:''}
+    <label class="f">Product name<input class="input" name="name" value="${esc(x.name)}" required></label>
+    <div class="grid2"><label class="f">SKU / item code<input class="input" name="sku" value="${esc(x.sku)}" ${p?'readonly':''} required><span class="hint">${p?'Fixed after creation':'Used to match imports and photos'}</span></label>
+    <label class="f">Category<input class="input" name="category" list="catlist" value="${esc(x.category)}"><datalist id="catlist">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist></label></div>
+    ${(()=>{ const st=struct(x); return `<div class="grid2"><label class="f">Unit size<div class="row" style="gap:6px"><input class="input" name="unitQty" inputmode="decimal" value="${st.unitQty!=null?esc(st.unitQty):''}" placeholder="10" data-in="pcalc"><select class="input" name="unit" style="width:90px" data-in="pcalc">${UNITS.map(u=>`<option ${st.unit===u?'selected':''}>${u}</option>`).join('')}</select></div></label><label class="f">Pcs per case<input class="input" name="pcs" inputmode="numeric" value="${st.pcs!=null?esc(st.pcs):''}" placeholder="4" data-in="pcalc"></label></div>
+    <p class="small muted" id="pcalcOut">${cwOf(x)?'Case: '+esc(packOf(x))+' = '+esc(cwOf(x)):'Case weight is calculated from unit size × pcs per case.'}</p>`; })()}
+    <div class="grid2"><label class="f">Price per case (USD)<input class="input" name="price" inputmode="decimal" value="${x.price!=null?esc(x.price):''}" required></label><label class="f">Lowest price allowed<span class="hint">Salesperson can't go below. Blank = no limit</span><input class="input" name="minPrice" inputmode="decimal" value="${x.minPrice!=null?esc(x.minPrice):''}"></label></div>
+    <div class="grid2"><label class="f">Stock qty<input class="input" name="stock" inputmode="numeric" value="${x.stock!=null?esc(x.stock):''}"><span class="hint">Blank hides stock</span></label><label class="f">Low stock at<input class="input" name="lowAt" inputmode="numeric" value="${x.lowAt!=null?esc(x.lowAt):'10'}"></label></div>
+    <label class="f">Minimum order qty (MOQ)<input class="input" name="moq" inputmode="numeric" value="${x.moq!=null?esc(x.moq):'1'}"></label>
+    <div class="f" style="font-size:13.5px;font-weight:500">Show in catalog<div class="seg2" style="margin-top:6px">${['restaurant','grocery'].map(t=>`<label><input type="checkbox" name="ch_${t}" ${(x.channels||[]).includes(t)?'checked':''}> ${CH[t].label}</label>`).join('')}</div></div>
+    <label class="row" style="gap:8px;cursor:pointer"><input type="checkbox" class="cb" name="active" ${x.active!==false?'checked':''}> Available to salespeople</label>
+  </form>
+  <div class="actions">${p?`<button class="btn danger" data-a="deleteProduct" data-id="${esc(p.id)}">Delete</button>`:''}<button class="btn ghost" data-a="close">Cancel</button><button class="btn" data-a="saveProduct" data-id="${esc(p?p.id:'')}">Save product</button></div>`);
+  S._pfile=null; S._removePhoto=false;
+}
+
+/* ---------- bulk edit ---------- */
+const BF = {price:'Price',moq:'MOQ',stock:'Stock',lowAt:'Low stock'};
+const SF=['unitQty','unit','pcs'];
+function baseVal(p,f){ if(SF.includes(f)) return struct(p)[f]; if(f==='customerPrices') return p.customerPrices||{}; return p[f]===undefined?null:p[f]; }
+function bval(p,f){ const e=S.bulk.edits[p.id]; return e && f in e ? e[f] : baseVal(p,f); }
+function eqv(f,a,b){ if(f==='customerPrices'){ const ks=new Set([...Object.keys(a||{}),...Object.keys(b||{})]); for(const k of ks){ const x=(a||{})[k], y=(b||{})[k]; const nx=x==null||x===''?null:Number(x), ny=y==null||y===''?null:Number(y); if(nx!==ny) return false; } return true; } return JSON.stringify(a)===JSON.stringify(b); }
+function bchanged(p){ const e=S.bulk.edits[p.id]; if(!e) return false; return Object.keys(e).some(f=>!eqv(f,e[f],baseVal(p,f))); }
+function bulkList(){
+  const q=S.q.bulk.trim().toLowerCase();
+  let list=S.products;
+  if(S.bulk.cat) list=list.filter(p=>p.category===S.bulk.cat);
+  if(q) list=list.filter(p=>[bval(p,'name'),p.sku].join(' ').toLowerCase().includes(q));
+  if(S.bulk.only) list=list.filter(bchanged);
+  return [...list].sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+}
+function bulkChangedCount(){ return S.products.filter(bchanged).length; }
+function viewBulk(){
+  const list=bulkList(); const cats=[...new Set(S.products.map(p=>p.category).filter(Boolean))].sort();
+  const nsel=Object.keys(S.bulk.sel).filter(k=>S.bulk.sel[k]).length; const nch=bulkChangedCount();
+  const allSel=list.length && list.every(p=>S.bulk.sel[p.id]); const cid=S.bulk.cust; const cust=cid&&getCustomer(cid);
+  const chg=(p,f,v)=>S.bulk.edits[p.id]&&f in S.bulk.edits[p.id]&&!eqv(f,v,baseVal(p,f));
+  const cellIn=(p,f,cls='')=>{ const v=bval(p,f); const shown=v==null?'':(f==='price'||f==='minPrice'?Number(v).toFixed(2):v);
+    return `<input class="cell ${cls} ${f==='price'?'w':''} ${chg(p,f,v)?'chg':''}" id="b_${esc(p.id)}_${f}" inputmode="decimal" data-in="bulk" data-id="${esc(p.id)}" data-f="${f}" value="${esc(shown)}" placeholder="—">`; };
+  const cpIn=p=>{ const cp=(bval(p,'customerPrices')||{})[cid]; const orig=(p.customerPrices||{})[cid]; const ch=(cp==null?null:Number(cp))!==(orig==null||orig===''?null:Number(orig));
+    return `<input class="cell w ${ch?'chg':''}" id="b_${esc(p.id)}_cp" inputmode="decimal" data-in="bulk" data-id="${esc(p.id)}" data-f="cprice" value="${cp==null||cp===''?'':Number(cp).toFixed(2)}" placeholder="${Number(bval(p,'price')||0).toFixed(2)}">`; };
+  const nameIn=p=>{ const v=bval(p,'name'); return `<input class="cell ${chg(p,'name',v)?'chg':''}" style="width:250px;text-align:left" id="b_${esc(p.id)}_name" data-in="bulk" data-id="${esc(p.id)}" data-f="name" value="${esc(v)}">`; };
+  const unitSel=p=>{ const v=bval(p,'unit'); return `<select class="cell ${chg(p,'unit',v)?'chg':''}" style="width:66px;text-align:left" data-in="bulkUnit" data-id="${esc(p.id)}">${UNITS.map(u=>`<option ${v===u?'selected':''}>${u}</option>`).join('')}</select>`; };
+  const cw=p=>{ const w=caseWt({unitQty:bval(p,'unitQty'),unit:bval(p,'unit'),pcs:bval(p,'pcs')}); return w?w.text:'—'; };
+  const togs=p=>['grocery','restaurant'].map(ch=>{ const on=(bval(p,'channels')||[]).includes(ch); const orig=(p.channels||[]).includes(ch); return `<button class="tog ${on?'on':''} ${on!==orig?'chg':''}" data-a="bulkTog" data-id="${esc(p.id)}" data-ch="${ch}">${CH[ch].short}</button>`; }).join(' ');
+  const custOpts=[...S.customers].sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+  return `<div class="pagehead"><div><h1>Bulk edit</h1><p class="muted">Update names, packing, prices, stock and catalogs for many products at once.</p></div>
+  <div class="row wrap">${S.downloads?`<button class="btn ghost" data-a="bulkExport">Export</button>`:''}<button class="btn ghost" data-a="bulkDiscard" ${nch?'':'disabled'}>Discard</button><button class="btn" data-a="bulkSave" ${nch&&!S.bulk.saving?'':'disabled'}>${S.bulk.saving?'Saving…':`Save changes${nch?' ('+nch+')':''}`}</button></div></div>
+  <div class="card pad" style="margin-bottom:14px"><div class="row" style="margin-bottom:10px"><h3>Apply to selected</h3><span class="pill s-confirmed">${nsel} selected</span></div>
+    <div class="applybar"><select class="input" id="apField" data-in="apField">${[['price','Price'],...(cid?[['cprice','Customer price']]:[]),['minPrice','Min sell'],['stock','Stock'],['lowAt','Low stock'],['moq','MOQ'],['pcs','Pcs per case'],['unitQty','Unit size'],['active','Available'],['restaurant','Restaurant catalog'],['grocery','Grocery catalog']].map(([k,l])=>`<option value="${k}" ${(S.bulk.apField||'price')===k?'selected':''}>${l}</option>`).join('')}</select>
+    <select class="input" id="apOp">${apOps(S.bulk.apField||'price')}</select>
+    <input class="input nocaps" id="apVal" inputmode="decimal" placeholder="e.g. 5" style="max-width:120px" ${['active','restaurant','grocery'].includes(S.bulk.apField)?'hidden':''}>
+    <button class="btn gold" data-a="bulkApply" ${nsel?'':'disabled'}>Apply</button></div>
+    <p class="muted small" style="margin-top:8px">Tick rows first, or use the header box to select everything in view. Nothing is saved until you press Save changes.</p></div>
+  <div class="card">
+    <div class="row wrap pad" style="gap:10px"><div class="search" style="flex:1;min-width:200px">${I.search}<input class="input" id="bulkSearch" data-in="q" data-k="bulk" placeholder="Search name or SKU" value="${esc(S.q.bulk)}"></div>
+    <select class="input" style="width:auto;min-width:160px" data-in="bulkCat"><option value="">All categories</option>${cats.map(c=>`<option ${S.bulk.cat===c?'selected':''}>${esc(c)}</option>`).join('')}</select>
+    <select class="input" style="width:auto;min-width:200px;text-transform:uppercase" data-in="bulkCust" title="Show a price column for one customer"><option value="">Customer price: none</option>${custOpts.map(c=>`<option value="${esc(c.id)}" ${cid===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select>
+    <label class="row small" style="gap:8px;cursor:pointer;border:1px solid var(--line);border-radius:8px;padding:10px 12px"><input type="checkbox" class="cb" data-in="bulkOnly" ${S.bulk.only?'checked':''}> Only changed</label></div>
+    ${cust?`<p class="small muted" style="padding:0 16px 10px">Customer price column is for <b style="text-transform:uppercase">${esc(cust.name)}</b>. Leave blank to use the list price.</p>`:''}
+    <div class="tablewrap"><table class="tbl"><thead><tr><th><input type="checkbox" class="cb" data-in="bulkSelAll" ${allSel?'checked':''} aria-label="Select all"></th><th>Product name</th><th class="r">Unit size</th><th>Unit</th><th class="r">Pcs / case</th><th class="r">Case weight</th><th class="r">Price</th>${cid?`<th class="r" style="color:var(--gold)">Customer price</th>`:''}<th class="r">Min sell</th><th class="r">MOQ</th><th class="r">Stock</th><th class="r">Low stock</th><th>Available</th><th>Catalogs</th></tr></thead>
+    <tbody>${list.slice(0,500).map(p=>`<tr class="${bchanged(p)?'chg':''}"><td><input type="checkbox" class="cb" data-in="bulkSel" data-id="${esc(p.id)}" ${S.bulk.sel[p.id]?'checked':''}></td><td>${nameIn(p)}<div class="muted small" style="margin-top:3px">${esc(p.sku||'No SKU')}</div></td>
+    <td class="r">${cellIn(p,'unitQty')}</td><td>${unitSel(p)}</td><td class="r">${cellIn(p,'pcs')}</td><td class="r"><b id="cw_${esc(p.id)}">${cw(p)}</b></td>
+    <td class="r">${cellIn(p,'price')}</td>${cid?`<td class="r">${cpIn(p)}</td>`:''}<td class="r">${cellIn(p,'minPrice','w')}</td><td class="r">${cellIn(p,'moq')}</td><td class="r">${cellIn(p,'stock')}</td><td class="r">${cellIn(p,'lowAt')}</td>
+    <td><input type="checkbox" class="cb" data-in="bulkActive" data-id="${esc(p.id)}" ${bval(p,'active')!==false?'checked':''}></td><td>${togs(p)}</td></tr>`).join('')||`<tr><td colspan="14" class="empty">No products to show.</td></tr>`}</tbody></table></div>
+  </div>`;
+}
+function apOps(f){
+  if(f==='price'||f==='cprice'||f==='minPrice') return '<option value="pct+">Raise by %</option><option value="pct-">Lower by %</option><option value="add">Add amount</option><option value="sub">Subtract amount</option><option value="set">Set to</option>'+(f==='cprice'?'<option value="clear">Clear (use list price)</option>':'');
+  if(f==='active') return '<option value="yes">Make available</option><option value="no">Make unavailable</option>';
+  if(f==='restaurant'||f==='grocery') return '<option value="yes">Add to catalog</option><option value="no">Remove from catalog</option>';
+  return '<option value="set">Set to</option><option value="add">Add</option><option value="sub">Subtract</option>';
+}
+function calc(base,op,v){ if(op==='pct+') return base*(1+v/100); if(op==='pct-') return base*(1-v/100); if(op==='add') return base+v; if(op==='sub') return base-v; return v; }
+function bset(p,f,v){ const e=S.bulk.edits[p.id]||(S.bulk.edits[p.id]={}); e[f]=v; }
+
+/* ---------- journeys (salesperson) ---------- */
+function photoField(key,label){
+  const d=S.jform[key];
+  return `<div class="f" style="font-size:13.5px;font-weight:500">${label}<label class="btn ghost" style="cursor:pointer;margin-top:6px">${I.cam} ${d?'Retake photo':'Take odometer photo'}<input type="file" accept="image/*" capture="environment" hidden data-in="jphoto" data-k="${key}"></label>${d?`<img class="photoprev" src="${d}" alt="Odometer photo">`:''}</div>`;
+}
+function geoField(key){
+  const g=S.jform[key]; const st=S.jform[key+'_st'];
+  if(!g && !st && key==='startGeo'){ S.jform[key+'_st']='busy'; getGeo().then(x=>{ S.jform[key]=x; S.jform[key+'_st']='ok'; render(); }).catch(()=>{ S.jform[key+'_st']='fail'; render(); }); }
+  const label = g ? `Location captured (±${g.acc} m) ${mapLink(g)}` : S.jform[key+'_st']==='fail' ? '<span style="color:var(--warn)">Location blocked. Allow location, or type the city below.</span>' : key==='endGeo' ? '<span class="muted">Location is captured when you tap End journey</span>' : '<span class="muted">Getting your location…</span>';
+  return `<div class="row between small" style="border:1px dashed var(--line);border-radius:8px;padding:10px 12px"><span class="row" style="gap:6px">${I.pin.replace('<svg','<svg style="width:18px;height:18px;color:var(--gold)"')} ${label}</span><button class="btn ghost sm" data-a="jgeo" data-k="${key}">${g?'Refresh':'Retry'}</button></div>`;
+}
+function viewJourney(){
+  const j=myActiveJourney(); const f=S.jform;
+  const mine=S.journeys.filter(x=>x.memberId===S.me.id);
+  const ms=jStats(mine.filter(x=>x.startAt>=startOfMonth()));
+  let top;
+  if(j){
+    const od=jOrders(j);
+    top=`<div class="jlive"><div class="row between"><span><span class="dot"></span>Journey running</span><span class="pill" style="background:rgba(255,255,255,.12);color:#fff;text-transform:uppercase">${esc(j.purpose)}</span></div>
+      <div class="big" data-since="${j.startAt}">${dur((Date.now()-j.startAt)/60000)}</div>
+      <div class="muted small" style="text-transform:uppercase">Started ${fmtTime(j.startAt)} from ${esc(j.startPlace)}, odometer ${mi(j.startOdo)}</div>
+      <div class="muted small">${od.length} orders on this trip, ${money(od.reduce((a,o)=>a+(o.total||0),0))}</div></div>
+    <div class="card pad stack" style="margin-top:14px"><h2>End journey</h2>
+      <label class="f">Ending odometer<input class="input" id="jEndOdo" inputmode="decimal" data-in="jf" data-k="endOdo" value="${esc(f.endOdo||'')}" placeholder="Must be ${mi(j.startOdo)} or more"></label>
+      ${photoField('endPhoto','Odometer photo (required)')}
+      ${geoField('endGeo')}
+      <label class="f">Ending location <span class="hint">${f.endGeo?'Optional, GPS already saved':'Required if GPS is blocked'}</span><input class="input" id="jEndPlace" data-in="jf" data-k="endPlace" value="${esc(f.endPlace||'')}" placeholder="City or last stop"></label>
+      <label class="f">Notes <span class="hint">Optional</span><textarea class="input" id="jNotes" data-in="jf" data-k="notes" placeholder="Stores visited, tolls, anything the office should know">${esc(f.notes||'')}</textarea></label>
+      <div class="err" id="jerr"></div>
+      <button class="btn block" style="min-height:50px" data-a="endJourney" ${S.readOnly?'disabled':''}>End journey</button></div>`;
+  } else {
+    const last=mine.find(x=>x.endOdo);
+    top=`<div class="card pad stack"><h2>Start journey</h2><p class="muted small">Log the odometer before you drive. You'll log it again when you finish.</p>
+      <label class="f">Purpose<select class="input" data-in="jf" data-k="purpose">${PURPOSES.map(p=>`<option ${(f.purpose||'MARKETING')===p?'selected':''}>${p}</option>`).join('')}</select></label>
+      <label class="f">Starting odometer<input class="input" id="jStartOdo" inputmode="decimal" data-in="jf" data-k="startOdo" value="${esc(f.startOdo||'')}" placeholder="${last?'Last trip ended at '+mi(last.endOdo):'e.g. 3456.8'}"></label>
+      ${photoField('startPhoto','Odometer photo (required)')}
+      ${geoField('startGeo')}
+      <label class="f">Starting location <span class="hint">${f.startGeo?'Optional, GPS already saved':'Required if GPS is blocked'}</span><input class="input" id="jStartPlace" data-in="jf" data-k="startPlace" value="${esc(f.startPlace||'')}" placeholder="City, e.g. Glen Ellyn"></label>
+      <div class="err" id="jerr"></div>
+      <button class="btn block" style="min-height:50px" data-a="startJourney" ${S.readOnly?'disabled':''}>${I.route} Start journey</button></div>`;
+  }
+  return `<div class="pagehead"><div><h1>Journey</h1><p class="muted">This month: ${mi(ms.miles)} mi over ${ms.trips} ${ms.trips===1?'trip':'trips'}, ${mi(ms.hours)} h on the road</p></div></div>
+  ${top}
+  <h2 style="margin:26px 0 10px">My trips</h2>
+  ${mine.filter(x=>x.status!=='active').length?`<div class="card list">${mine.filter(x=>x.status!=='active').slice(0,30).map(x=>`<button class="li" data-a="openJourney" data-id="${esc(x.id)}"><span class="grow"><div class="t">${fmtDate(x.startAt)}, ${esc(x.purpose)}</div><div class="s">${esc(x.startPlace)} → ${esc(x.endPlace||'—')}</div></span><span style="text-align:right"><div style="font-weight:700">${mi(x.distance)} mi</div><span class="pill s-${x.status}">${JSTATUS[x.status]}</span></span></button>`).join('')}</div>`:`<div class="card empty">No trips yet.</div>`}`;
+}
+
+/* ---------- journeys (admin) ---------- */
+function jFiltered(){
+  let l=S.journeys; if(S.jf.member!=='all') l=l.filter(j=>j.memberId===S.jf.member); if(S.jf.status!=='all') l=l.filter(j=>j.status===S.jf.status); return l;
+}
+function viewJourneys(){
+  const list=jFiltered(); const m0=startOfMonth();
+  const ms=jStats(S.journeys.filter(j=>j.startAt>=m0 && (S.jf.member==='all'||j.memberId===S.jf.member)));
+  const rate=Number(S.app.rate)||0;
+  const members=[...new Set([...Object.values(S.accounts).filter(a=>a.role==='sales').map(a=>a.id),...S.journeys.map(j=>j.memberId)])];
+  const row=j=>{ const sp=j.durationMin?(j.distance/(j.durationMin/60)):0;
+    return `<tr><td><b>${fmtDate(j.startAt)}</b> ${j.status==='active'?'<span class="pill s-active">Active</span>':''}<div class="muted small">${fmtTime(j.startAt)}${j.endAt?' – '+fmtTime(j.endAt):''}</div></td><td style="text-transform:uppercase">${esc(nameOf(j.memberId))}</td><td style="text-transform:uppercase">${esc(j.purpose)}</td>
+    <td><div class="route">${esc(j.startPlace)} → ${esc(j.endPlace||'—')}</div><div class="small">${j.startGeo?`<a href="https://www.google.com/maps?q=${j.startGeo.lat},${j.startGeo.lng}" target="_blank" rel="noopener" class="linkbtn">Start map</a>`:''}${j.endGeo?` <a href="https://www.google.com/maps/dir/${j.startGeo?j.startGeo.lat+','+j.startGeo.lng+'/':''}${j.endGeo.lat},${j.endGeo.lng}" target="_blank" rel="noopener" class="linkbtn">End map</a>`:''}</div></td><td class="r">${mi(j.startOdo)} → ${j.endOdo!=null?mi(j.endOdo):'…'}</td>
+    <td class="r"><b>${j.status==='active'?'—':mi(j.distance)+' mi'}</b></td><td class="r"><b style="color:var(--gold)">${j.status==='active'?'—':rate?money(j.distance*rate):'Set rate'}</b></td><td class="r">${j.status==='active'?`<span data-since="${j.startAt}"></span>`:dur(j.durationMin)}</td><td class="r">${sp?Math.round(sp)+' mph':'—'}</td>
+    <td>${j.hasStartPhoto?`<button class="photobtn" data-a="jphotoView" data-id="${esc(j.id)}" data-w="start">${I.cam.replace('<svg','<svg style="width:14px;height:14px"')} Start</button> `:''}${j.hasEndPhoto?`<button class="photobtn" data-a="jphotoView" data-id="${esc(j.id)}" data-w="end">${I.cam.replace('<svg','<svg style="width:14px;height:14px"')} End</button>`:''}${!j.hasStartPhoto&&!j.hasEndPhoto?'<span class="muted">—</span>':''}</td>
+    <td><span class="pill s-${j.status}">${JSTATUS[j.status]}</span>${j.correctedAt?'<div class="muted small">Corrected</div>':''}</td>
+    <td class="r"><div class="row" style="justify-content:flex-end;gap:6px">${j.status==='pending'?`<button class="btn sm" data-a="verifyJourney" data-id="${esc(j.id)}">Verify</button>`:''}<button class="btn ghost sm" data-a="correctJourney" data-id="${esc(j.id)}">Correct</button><button class="linkbtn small" data-a="openJourney" data-id="${esc(j.id)}">Open</button></div></td></tr>`; };
+  return `<div class="pagehead"><div><h1>Journeys</h1><p class="muted">Odometer logs from the field. Verify each trip before it counts for mileage.</p></div>
+  <div class="row wrap">${S.downloads?`<button class="btn ghost" data-a="exportJourneys">Export CSV</button>`:''}<button class="btn" data-a="logForMember">${I.plus} Log for a member</button></div></div>
+  ${!rate?`<div class="card pad row between wrap" style="margin-bottom:14px;border-color:var(--gold)"><div><h3>Set your mileage reimbursement rate</h3><p class="muted small">Driving cost for each trip is miles × this rate.</p></div><div class="row"><input class="input nocaps" id="rateIn" inputmode="decimal" placeholder="0.70" style="width:110px"><button class="btn" data-a="saveRate">Save rate</button></div></div>`:''}
+  <div class="stats">
+    <div class="card stat"><div class="l">Driving cost this month</div><div class="v">${rate?money(ms.miles*rate):'—'}</div><div class="small muted">${rate?money(rate)+' per mile':'Set a rate above'}</div></div>
+    <div class="card stat"><div class="l">Miles this month</div><div class="v">${mi(ms.miles)} mi</div><div class="small muted">Odometer based</div></div>
+    <div class="card stat"><div class="l">Trips this month</div><div class="v">${ms.trips}</div><div class="small muted">${mi(ms.hours)} h on the road</div></div>
+    <div class="card stat"><div class="l">Awaiting review</div><div class="v">${S.journeys.filter(j=>j.status==='pending').length}</div><div class="small muted">Avg ${mi(ms.avg)} mi per trip</div></div>
+  </div>
+  <div class="card">
+    <div class="row wrap pad" style="gap:10px;justify-content:space-between"><div><h2>Journey history</h2><p class="muted small">${list.length} ${list.length===1?'trip':'trips'}</p></div>
+    <div class="row wrap"><select class="input" style="width:auto" data-in="jfMember"><option value="all">All members</option>${members.map(id=>`<option value="${esc(id)}" ${S.jf.member===id?'selected':''}>${esc(up(nameOf(id)))}</option>`).join('')}</select>
+    <select class="input" style="width:auto" data-in="jfStatus">${[['all','All statuses'],['active','Active'],['pending','Pending'],['verified','Verified']].map(([k,l])=>`<option value="${k}" ${S.jf.status===k?'selected':''}>${l}</option>`).join('')}</select></div></div>
+    <div class="tablewrap"><table class="tbl"><thead><tr><th>Date</th><th>Member</th><th>Purpose</th><th>Route</th><th class="r">Odometer</th><th class="r">Distance</th><th class="r">Cost</th><th class="r">Duration</th><th class="r">Avg speed</th><th>Photos</th><th>Status</th><th class="r">Actions</th></tr></thead>
+    <tbody>${list.slice(0,300).map(row).join('')||`<tr><td colspan="12" class="empty">No journeys match.</td></tr>`}</tbody></table></div></div>`;
+}
+function openJourney(id){
+  const j=S.journeys.find(x=>x.id===id); if(!j) return; const od=jOrders(j);
+  modal(`<div class="sh"><div><h2>${fmtDate(j.startAt)}</h2><p class="muted small" style="text-transform:uppercase">${esc(nameOf(j.memberId))}, ${esc(j.purpose)}</p></div><button class="x" data-a="close">×</button></div>
+  <span class="pill s-${j.status}">${JSTATUS[j.status]}</span>
+  <dl class="kv" style="margin-top:14px"><dt>Start</dt><dd>${fmtTime(j.startAt)}, ${esc(j.startPlace)} ${mapLink(j.startGeo)}</dd><dt>End</dt><dd>${j.endAt?fmtTime(j.endAt)+', '+esc(j.endPlace):'Still running'} ${mapLink(j.endGeo)}</dd>
+  <dt>Odometer</dt><dd>${mi(j.startOdo)} → ${j.endOdo!=null?mi(j.endOdo):'…'}</dd><dt>Distance</dt><dd>${j.status==='active'?'—':mi(j.distance)+' mi'}</dd>${role()==='admin'&&j.status!=='active'&&Number(S.app.rate)?`<dt>Driving cost</dt><dd><b>${money(j.distance*Number(S.app.rate))}</b> at ${money(S.app.rate)}/mi</dd>`:''}<dt>Duration</dt><dd>${j.status==='active'?'—':dur(j.durationMin)}</dd>
+  <dt>Orders</dt><dd>${od.length}, ${money(od.reduce((a,o)=>a+(o.total||0),0))}</dd>${j.notes?`<dt>Notes</dt><dd>${esc(j.notes)}</dd>`:''}${j.verifiedAt?`<dt>Verified</dt><dd>${fmtDT(j.verifiedAt)} by ${esc(nameOf(j.verifiedBy))}</dd>`:''}${j.correctedAt?`<dt>Corrected</dt><dd>${fmtDT(j.correctedAt)} by ${esc(nameOf(j.correctedBy))}</dd>`:''}</dl>
+  <div class="row wrap" style="margin-top:14px">${j.hasStartPhoto?`<button class="btn ghost sm" data-a="jphotoView" data-id="${esc(j.id)}" data-w="start">${I.cam} Start photo</button>`:''}${j.hasEndPhoto?`<button class="btn ghost sm" data-a="jphotoView" data-id="${esc(j.id)}" data-w="end">${I.cam} End photo</button>`:''}</div>
+  <div id="jphotobox"></div>
+  ${role()==='admin'?`<div class="actions"><button class="btn danger" data-a="deleteJourney" data-id="${esc(j.id)}">Delete</button><button class="btn ghost" data-a="correctJourney" data-id="${esc(j.id)}">Correct</button>${j.status==='pending'?`<button class="btn" data-a="verifyJourney" data-id="${esc(j.id)}">Verify</button>`:''}</div>`:''}`);
+}
+function journeyForm(j, isNew){
+  j=j||{startAt:Date.now()-8*3600e3,endAt:Date.now(),purpose:'MARKETING'};
+  const sales=activeAccounts();
+  return `<form id="jForm" class="stack" onsubmit="return false">
+  ${isNew?`<label class="f">Member<select class="input" name="memberId">${sales.map(a=>`<option value="${esc(a.id)}">${esc(up(a.name))}</option>`).join('')}</select></label>`:''}
+  <label class="f">Purpose<select class="input" name="purpose">${[...new Set([...PURPOSES,up(j.purpose)])].map(p=>`<option ${up(j.purpose)===p?'selected':''}>${esc(p)}</option>`).join('')}</select></label>
+  <div class="grid2"><label class="f">Start time<input class="input" type="datetime-local" name="startAt" value="${toLocalInput(j.startAt)}"></label><label class="f">End time<input class="input" type="datetime-local" name="endAt" value="${toLocalInput(j.endAt)}"></label></div>
+  <div class="grid2"><label class="f">Start odometer<input class="input" name="startOdo" inputmode="decimal" value="${j.startOdo!=null?esc(j.startOdo):''}"></label><label class="f">End odometer<input class="input" name="endOdo" inputmode="decimal" value="${j.endOdo!=null?esc(j.endOdo):''}"></label></div>
+  <div class="grid2"><label class="f">Start location<input class="input" name="startPlace" value="${esc(j.startPlace)}"></label><label class="f">End location<input class="input" name="endPlace" value="${esc(j.endPlace)}"></label></div>
+  <label class="f">Notes<textarea class="input" name="notes">${esc(j.notes)}</textarea></label><div class="err" id="jferr"></div></form>`;
+}
+function readJourneyForm(){
+  const f=readForm('jForm'); const sa=new Date(f.startAt).getTime(), ea=new Date(f.endAt).getTime(); const so=num(f.startOdo), eo=num(f.endOdo);
+  if(!f.startOdo||!f.endOdo) return {err:'Enter both odometer readings'}; if(eo<so) return {err:'End odometer is lower than start'};
+  if(!(ea>sa)) return {err:'End time must be after start time'};
+  return {body:{purpose:up(f.purpose),startAt:sa,endAt:ea,startOdo:so,endOdo:eo,startPlace:up(f.startPlace),endPlace:up(f.endPlace),notes:up(f.notes),distance:Math.round((eo-so)*10)/10,durationMin:Math.round((ea-sa)/60000)},memberId:f.memberId};
+}
+
+/* ---------- team (admin) ---------- */
+function viewTeam(){
+  const accs=Object.values(S.accounts).sort((a,b)=>(a.role===b.role?0:a.role==='admin'?-1:1)||String(a.name).localeCompare(String(b.name)));
+  return `<div class="pagehead"><div><h1>Team</h1><p class="muted">Logins for admins and salespeople. Each person signs in with their own username and password.</p></div><button class="btn" data-a="addAccount">${I.plus} Add login</button></div>
+  <div class="card list">${accs.map(a=>`<button class="li ${a.active===false?'off':''}" data-a="editAccount" data-id="${esc(a.id)}"><span class="avatar">${esc(initials(a.name))}</span><span class="grow"><div class="t">${esc(a.name)}${a.id===S.me.id?' (YOU)':''}</div><div class="s" style="text-transform:none">Username: ${esc(a.username)}${a.active===false?', disabled':''}</div></span><span class="pill ${a.role==='admin'?'s-confirmed':'s-new'}">${a.role==='admin'?'Admin':'Salesperson'}</span></button>`).join('')}</div>
+  <h2 style="margin:28px 0 10px">Settings</h2>
+  <div class="card pad stack">
+    <label class="f">Mileage reimbursement rate (USD per mile)<span class="hint">Optional. Shows the amount owed next to each verified trip.</span><div class="row"><input class="input nocaps" id="rateIn" inputmode="decimal" value="${S.app.rate?esc(S.app.rate):''}" style="max-width:160px" placeholder="0.70"><button class="btn ghost" data-a="saveRate">Save rate</button></div></label>
+    <div style="border-top:1px solid var(--line);padding-top:14px" class="stack"><h3>Company details on the order sheet</h3>
+      <form id="coForm" class="stack" onsubmit="return false">${(()=>{ const c=company(); return `<div class="grid2"><label class="f">Company name<input class="input" name="name" value="${esc(c.name)}"></label><label class="f">Tagline<input class="input" name="tagline" value="${esc(c.tagline)}"></label></div><label class="f">Address<input class="input" name="address" value="${esc(c.address)}"></label><div class="grid2"><label class="f">Phone<input class="input" name="phone" value="${esc(c.phone)}"></label><label class="f">Email<input class="input" type="email" name="email" value="${esc(c.email)}"></label></div>`; })()}</form>
+      <button class="btn ghost" style="align-self:flex-start" data-a="saveCompany">Save company details</button></div>
+    <div class="row between wrap" style="border-top:1px solid var(--line);padding-top:14px"><div><h3>Convert old records to capitals</h3><p class="muted small">New entries are saved in capitals automatically. This updates products, customers and orders saved earlier.</p></div><button class="btn ghost" data-a="capsAll">Convert now</button></div>
+  </div>`;
+}
+function accountForm(a){
+  a=a||{role:'sales'};
+  return `<form id="accForm" class="stack" onsubmit="return false">
+  <div class="seg2">${[['sales','Salesperson'],['admin','Admin']].map(([k,l])=>`<label><input type="radio" name="role" value="${k}" ${a.role===k?'checked':''}> ${l}</label>`).join('')}</div>
+  <label class="f">Full name<input class="input" name="name" value="${esc(a.name)}" required></label>
+  <label class="f">Username<span class="hint">Letters and numbers, no spaces</span><input class="input nocaps" name="username" autocapitalize="none" value="${esc(a.username)}" required></label>
+  <label class="f">${a.id?'New password':'Password'}<span class="hint">${a.id?'Leave blank to keep the current password':'At least 6 characters. Share it with them privately.'}</span><input class="input" type="password" name="pw" autocomplete="new-password"></label>
+  ${a.id?`<label class="row" style="gap:8px;cursor:pointer"><input type="checkbox" class="cb" name="active" ${a.active!==false?'checked':''}> Can sign in</label>`:''}
+  <div class="err" id="accerr"></div></form>`;
+}
+/* ---------- modal ---------- */
+function modal(html){ $('#modal').innerHTML=`<div class="scrim" data-a="scrim"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`; document.body.style.overflow='hidden'; hydrateImages($('#modal')); }
+function closeModal(){ $('#modal').innerHTML=''; document.body.style.overflow=''; }
+
+/* ---------- CSV ---------- */
+function parseCSV(text){
+  const rows=[]; let row=[], f='', q=false;
+  text=String(text).replace(/^\uFEFF/,'');
+  for(let i=0;i<text.length;i++){ const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){f+='"';i++;} else q=false; } else f+=c; }
+    else if(c==='"') q=true; else if(c===','||c==='\t'){ row.push(f); f=''; } else if(c==='\n'){ row.push(f); rows.push(row); row=[]; f=''; } else if(c!=='\r') f+=c; }
+  if(f!==''||row.length){ row.push(f); rows.push(row); }
+  return rows.filter(r=>r.some(x=>String(x).trim()!==''));
+}
+const csvCell = v => { const s=String(v==null?'':v); return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; };
+const toCSV = rows => rows.map(r=>r.map(csvCell).join(',')).join('\n');
+const TEMPLATE = 'sku,name,category,unit_size,unit,pcs_per_case,price,moq,stock_qty,low_stock,channel,active\nPAR-BAS-10,PARADISE BASMATI RICE 10 LB,RICE,10,LB,4,72.00,1,120,10,both,yes\nAMB-MAK-100,AMBER MAKHANA 100 G,SNACKS,100,G,24,54.00,2,40,10,grocery,yes\n';
+function mapRow(h,r){
+  const get=(...keys)=>{ for(const k of keys){ const i=h.indexOf(k); if(i>-1 && r[i]!=null && String(r[i]).trim()!=='') return String(r[i]).trim(); } return ''; };
+  const sku=get('sku','item_code','code','item'), name=get('name','product','product_name','item_name');
+  if(!sku||!name) return null;
+  const chRaw=get('channel','catalogs','catalog','segment','type').toLowerCase();
+  const channels = !chRaw||/both|all/.test(chRaw)?['restaurant','grocery']:[...(/rest|food/.test(chRaw)?['restaurant']:[]),...(/groc|retail|store/.test(chRaw)?['grocery']:[])];
+  const stockS=get('stock_qty','stock','qty','quantity'); const act=get('active','available','visible').toLowerCase(); const moqS=get('moq','min_qty'); const lowS=get('low_stock','low_at','reorder');
+  const o={sku:up(sku),name:up(name),category:up(get('category')),pack:up(get('pack_size','pack','case','size','unit')),price:num(get('price','rate','unit_price')),
+    stock:stockS===''?null:num(stockS),channels:channels.length?channels:['restaurant','grocery'],active:!/^(no|n|false|0)$/.test(act)};
+  const minS=get('min_price','min_sell','minimum_price'); if(minS!=='') o.minPrice=num(minS);
+  if(moqS!=='') o.moq=Math.max(1,Math.round(num(moqS))); if(lowS!=='') o.lowAt=num(lowS);
+  const us=get('unit_size','unit_qty','size_each'), pcsS=get('pcs_per_case','pcs','pieces','case_qty');
+  let st = us!==''||pcsS!=='' ? {unitQty:us===''?null:num(us),unit:normU(get('unit','uom')||'LB'),pcs:pcsS===''?null:num(pcsS)} : parsePack(o.pack);
+  if(st){ o.unitQty=st.unitQty; o.unit=st.unit; o.pcs=st.pcs; o.pack=packText(st,o.pack); }
+  return o;
+}
+function importModal(){
+  modal(`<div class="sh"><h2>Import products</h2><button class="x" data-a="close">×</button></div>
+  <div class="stack">
+    <p class="small">Upload a CSV (Excel: File, Save As, CSV). Required columns: <b>sku</b>, <b>name</b>, <b>price</b>. Optional: category, unit_size, unit (LB, KG, G, OZ, L, ML), pcs_per_case, moq, stock_qty, low_stock, channel (restaurant, grocery or both), active (yes/no). Existing SKUs are updated, new SKUs are added. Text is saved in capitals.</p>
+    ${S.downloads?`<button class="btn ghost sm" style="align-self:flex-start" data-a="template">Download template</button>`:''}
+    <label class="btn ghost" style="cursor:pointer">Choose CSV file<input type="file" accept=".csv,text/csv,.txt" hidden data-in="csvfile"></label>
+    <label class="f">Or paste rows here<textarea class="input nocaps" id="csvpaste" data-in="csvpaste" style="min-height:120px;font-size:13px;text-transform:none" placeholder="sku,name,category,pack_size,price,moq,stock_qty,low_stock,channel,active"></textarea></label>
+    <div id="csvpreview" class="small muted"></div>
+  </div>
+  <div class="actions"><button class="btn ghost" data-a="close">Cancel</button><button class="btn" id="csvgo" data-a="runImport" disabled>Import</button></div>`);
+  S._import=null;
+}
+function previewImport(text){
+  const rows=parseCSV(text); const el=$('#csvpreview'), go=$('#csvgo');
+  if(rows.length<2){ el.textContent='Need a header row plus at least one product.'; go.disabled=true; S._import=null; return; }
+  const h=rows[0].map(x=>String(x).trim().toLowerCase().replace(/\s+/g,'_'));
+  const items=rows.slice(1).map(r=>mapRow(h,r)); const ok=items.filter(Boolean);
+  const bySku={}; ok.forEach(i=>bySku[skuId(i.sku)]=i); const list=Object.values(bySku);
+  const upd=list.filter(i=>S.products.some(p=>p.id===skuId(i.sku))).length;
+  S._import=list; go.disabled=!list.length; go.textContent=`Import ${list.length} products`;
+  el.innerHTML=`${list.length} ready: ${list.length-upd} new, ${upd} updates.${items.length-ok.length?` ${items.length-ok.length} rows skipped (missing SKU or name).`:''}`;
+}
+async function runImport(){
+  const list=S._import||[]; if(!list.length) return; const go=$('#csvgo'); go.disabled=true;
+  const el=$('#csvpreview'); el.innerHTML=`<div class="progress"><i id="pbar"></i></div><p id="ptxt" style="margin-top:6px">Starting…</p>`;
+  let done=0, fail=0, lastErr=null; const now=Date.now();
+  const ops=list.map(it=>{ const id=skuId(it.sku); const ex=S.products.find(p=>p.id===id);
+    const body={moq:1,lowAt:10,...(ex||{}),...it,imageId:ex&&ex.imageId||null,updatedAt:now,createdAt:ex&&ex.createdAt||now}; delete body.id; return {op:'set',col:'catalog',id,data:body}; });
+  const t=$('#ptxt'); if(t) t.textContent=`Saving ${list.length} products…`;
+  try{ for(let i=0;i<ops.length;i+=400){ await S.db.bulk(ops.slice(i,i+400)); done=Math.min(ops.length,i+400); const b=$('#pbar'); if(b) b.style.width=(done/ops.length*100)+'%'; } }catch(e){ fail=ops.length-done; lastErr=e; }
+  closeModal(); toast(fail?`Imported ${done-fail}, ${fail} failed. ${writeErr(lastErr,'admin')}`:`Imported ${done} products`);
+}
+
+/* ---------- photos (catalog) ---------- */
+async function compress(file){
+  try{ const bmp=await createImageBitmap(file); const m=900, s=Math.min(1,m/Math.max(bmp.width,bmp.height));
+    const c=document.createElement('canvas'); c.width=Math.round(bmp.width*s); c.height=Math.round(bmp.height*s);
+    const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(bmp,0,0,c.width,c.height);
+    const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.82)); return b||file; }catch(e){ return file; }
+}
+async function uploadImage(file){
+  const bmp=await createImageBitmap(file); let data=null;
+  for(const [m,q] of [[900,.8],[700,.72],[520,.65],[400,.6]]){ const k=Math.min(1,m/Math.max(bmp.width,bmp.height)); const c=document.createElement('canvas'); c.width=Math.round(bmp.width*k); c.height=Math.round(bmp.height*k);
+    const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(bmp,0,0,c.width,c.height); data=c.toDataURL('image/jpeg',q); if(data.length<700000) break; }
+  const ref=S.db.collection('productImages').doc(); await ref.set({data,at:Date.now()}); IMGC[ref.id]=data; return ref.id;
+}
+function photosModal(){
+  modal(`<div class="sh"><h2>Upload product photos</h2><button class="x" data-a="close">×</button></div>
+  <div class="stack"><p class="small">Name each photo file by its SKU, for example <b>PAR-BAS-10.jpg</b>, then select them all at once. Each photo is matched to its product and resized automatically.</p>
+  <label class="btn" style="cursor:pointer">Select photos<input type="file" accept="image/*" multiple hidden data-in="bulkphotos"></label>
+  <div id="photolog" class="small"></div></div>`);
+}
+async function runBulkPhotos(files){
+  const log=$('#photolog'); const bySku={}; S.products.forEach(p=>bySku[String(p.sku).toLowerCase()]=p);
+  const matched=[], missed=[];
+  [...files].forEach(f=>{ const base=f.name.replace(/\.[^.]+$/,'').trim().toLowerCase(); const p=bySku[base]; p?matched.push([f,p]):missed.push(f.name); });
+  log.innerHTML=`<div class="progress"><i id="pbar2"></i></div><p id="ptxt2" style="margin-top:6px">${matched.length} matched${missed.length?`, ${missed.length} with no matching SKU`:''}</p>${missed.length?`<p class="muted" style="margin-top:6px">Not matched: ${esc(missed.slice(0,12).join(', '))}${missed.length>12?'…':''}</p>`:''}`;
+  let n=0, fail=0;
+  for(const [f,p] of matched){ try{ const id=await uploadImage(f); await withRetry(()=>S.db.collection('catalog').doc(p.id).update({imageId:id,updatedAt:Date.now()})); }catch(e){ fail++; }
+    n++; const b=$('#pbar2'); if(b) b.style.width=(n/matched.length*100)+'%'; const t=$('#ptxt2'); if(t) t.textContent=`Uploaded ${n-fail} of ${matched.length}${fail?`, ${fail} failed`:''}`; }
+  if(matched.length) toast(`Photos updated: ${n-fail}`);
+}
+
+/* ---------- actions ---------- */
+const A = {
+  nav:(el)=>{ closeModal(); go(el.dataset.v); },
+  more:()=>{ const main=['dashboard','orders','catalog','journeys']; modal(`<div class="sh"><h2>More</h2><button class="x" data-a="close">×</button></div><div class="stack more-list" style="gap:8px">${navItems().filter(i=>!main.includes(i[0])).map(([v,l,ic])=>`<button class="btn ghost" data-a="nav" data-v="${v}">${ic} ${l}</button>`).join('')}<button class="btn ghost" data-a="changePw">Change password</button><button class="btn ghost" data-a="signOut">Sign out</button></div>`); },
+  signOut:()=>{ closeModal(); $('#toast').hidden=true; S.authMsg=''; stopData(); renderAuth(); },
+  toggleRole:()=>A.signOut(),
+  login: async (el)=>{
+    const err=$('#autherr'); const f=readForm('loginForm'); if(!f.username||!f.pw){ err.textContent='Enter username and password.'; return; }
+    el.disabled=true; el.textContent='Signing in…';
+    try{ const r=await API.call('login',{username:f.username,password:f.pw}); API.setToken(r.token); await startSession(); }
+    catch(e){ el.disabled=false; el.textContent='Sign in'; err.textContent= e.code==='network'?'No internet connection.':(e.message||'Wrong username or password.'); }
+  },
+  setupAdmin: async (el)=>{
+    const f=readForm('setupForm'); const err=$('#autherr'); const u=f.username.trim().toLowerCase();
+    if(!f.name||!/^[a-z0-9._-]{3,}$/.test(u)){ err.textContent='Enter your name and a username (3+ letters or numbers).'; return; }
+    if(f.pw.length<6){ err.textContent='Password must be at least 6 characters.'; return; } if(f.pw!==f.pw2){ err.textContent='Passwords don\'t match.'; return; }
+    el.disabled=true;
+    try{ const r=await API.call('setup',{name:f.name,username:u,password:f.pw}); API.setToken(r.token); S.bootstrapped=true; await startSession(); }
+    catch(e){ el.disabled=false; err.textContent=e.message||'Could not create the login.'; }
+  },
+  startOrder:(el)=>{ closeModal(); const ch=el.dataset.ch; if(S.draft && draftCount() && S.draft.channel===ch && S.view!=='order'){ S.step=S.draft.customerId?'catalog':'customer'; }
+    else { S.draft=newDraft(ch); saveDraft(); S.step='customer'; } S.q.cust=''; S.q.prod=''; S.cat=''; S.custAll=false; S.view='order'; render(); window.scrollTo(0,0); },
+  resume:()=>{ S.view='order'; S.step=S.draft.customerId?'catalog':'customer'; render(); window.scrollTo(0,0); },
+  discardDraft:()=>{ if(!confirm('Discard the order in progress?')) return; S.draft=newDraft(); saveDraft(); S.step='channel'; render(); },
+  changeChannel:()=>{ S.draft.channel=null; S.draft.customerId=null; saveDraft(); S.step='channel'; render(); },
+  changeCustomer:()=>{ S.step='customer'; render(); window.scrollTo(0,0); },
+  pickCustomer:(el)=>{ const c=getCustomer(el.dataset.id); S.draft.customerId=el.dataset.id; S.draft.customer=c; saveDraft(); S.step='catalog'; S.q.prod=''; S.cat=''; render(); window.scrollTo(0,0); },
+  newCustomer:(el)=>{ const ch=el.dataset.ch||(S.custFilter!=='all'?S.custFilter:'restaurant'); const inFlow=S.view==='order';
+    modal(`<div class="sh"><h2>New customer</h2><button class="x" data-a="close">×</button></div>${customerForm({name:up(el.dataset.name||'')},ch)}<div class="actions"><button class="btn ghost" data-a="close">Cancel</button><button class="btn" data-a="saveCustomer" data-flow="${inFlow?1:0}">${inFlow?'Save and continue to catalog':'Save customer'}</button></div>`);
+    setTimeout(()=>{ const n=document.querySelector('#custForm [name=name]'); n&&n.focus(); },50); },
+  editCustomer:(el)=>{ const c=getCustomer(el.dataset.id); modal(`<div class="sh"><h2>Edit customer</h2><button class="x" data-a="close">×</button></div>${customerForm(c)}<div class="actions"><button class="btn ghost" data-a="close">Cancel</button><button class="btn" data-a="saveCustomer" data-id="${esc(el.dataset.id)}">Save changes</button></div>`); },
+  saveCustomer: async (el)=>{
+    const f=readForm('custForm'); if(!f.name){ toast('Enter the business name'); return; }
+    const id=el.dataset.id; el.disabled=true;
+    const body={name:up(f.name),type:f.type||'restaurant',contact:up(f.contact),phone:f.phone,email:f.email.toLowerCase(),address:up(f.address),city:up(f.city),taxId:up(f.taxId),notes:up(f.notes),updatedAt:Date.now()};
+    if(role()==='admin') body.assignedTo=Object.keys(f).filter(k=>k.startsWith('as_')).map(k=>k.slice(3));
+    else if(!id) body.assignedTo=[S.me.id];
+    try{
+      if(id){ await withRetry(()=>S.db.collection('customers').doc(id).update(body)); closeModal(); toast('Customer updated'); render(); return; }
+      body.createdAt=Date.now(); body.createdBy=S.me.id;
+      const ref=S.db.collection('customers').doc(); if(await commit(ref.set(body))==='queued') toast('Saved offline. It will sync when you are back online.');
+      S.pendingCustomers[ref.id]={id:ref.id,...body};
+      closeModal();
+      if(el.dataset.flow==='1'){ // stay in the order: select the new customer and go straight to the catalog
+        S.draft.channel=body.type; S.draft.customerId=ref.id; S.draft.customer={id:ref.id,...body}; saveDraft();
+        S.step='catalog'; S.q.prod=''; S.cat=''; S.view='order';
+        toast('Customer added. Now add products.'); render(); window.scrollTo(0,0);
+      } else { toast('Customer added'); render(); }
+    }catch(e){ el.disabled=false; toast(writeErr(e)); }
+  },
+  deleteCustomer: async (el)=>{ if(!confirm('Delete this customer? Their past orders stay.')) return; try{ await S.db.collection('customers').doc(el.dataset.id).delete(); closeModal(); toast('Customer deleted'); }catch(e){ toast(writeErr(e)); } },
+  openCustomer:(el)=>openCustomer(el.dataset.id),
+  orderFor:(el)=>{ const c=getCustomer(el.dataset.id); closeModal(); S.draft=newDraft(c.type); S.draft.customerId=c.id; S.draft.customer=c; saveDraft(); S.step='catalog'; S.q.prod=''; S.cat=''; S.view='order'; render(); window.scrollTo(0,0); },
+  cat:(el)=>{ S.cat=el.dataset.c; render(); },
+  qty:(el)=>{ stepQty(el.dataset.id, Number(el.dataset.d)); render(); },
+  removeLine:(el)=>{ setQty(el.dataset.id,0); if(S.draft.prices) delete S.draft.prices[el.dataset.id]; saveDraft(); render(); },
+  resetPrice:(el)=>{ delete S.draft.prices[el.dataset.id]; saveDraft(); render(); },
+  review:()=>{ S.step='review'; render(); window.scrollTo(0,0); },
+  backToShop:()=>{ S.step='catalog'; render(); window.scrollTo(0,0); },
+  placeOrder: async ()=>{
+    if(S.placing) return; const d=S.draft; const lines=draftLines(); const c=getCustomer(d.customerId)||d.customer;
+    if(!c){ toast('Choose a customer'); S.step='customer'; render(); return; } if(!lines.length){ toast('Add at least one product'); return; }
+    const low=lines.filter(({p})=>belowMin(p)); if(low.length){ toast(`${low[0].p.name}: lowest allowed price is ${money(minOf(low[0].p))}`); return; }
+    S.placing=true; render();
+    const now=new Date(); const pad=n=>String(n).padStart(2,'0');
+    const number=`SO-${String(now.getFullYear()).slice(2)}${pad(now.getMonth()+1)}${pad(now.getDate())}-${String(Math.floor(1000+Math.random()*9000))}`;
+    const order={number,customerId:c.id,customer:{name:c.name||'',type:c.type||d.channel,contact:c.contact||'',phone:c.phone||'',email:c.email||'',address:c.address||'',city:c.city||''},
+      channel:d.channel,lines:lines.map(({p,qty})=>{ const w=caseWt(struct(p)); return {pid:p.id,sku:p.sku||'',name:p.name,pack:packOf(p),caseWt:w?w.text:'',caseLb:w?Math.round(toLb(w)*100)/100:0,price:Math.round(linePrice(p)*100)/100,listPrice:Number(p.price)||0,basePrice:priceFor(p,c.id),adjusted:isAdjusted(p),qty}; }),
+      itemCount:lines.reduce((a,l)=>a+l.qty,0),total:Math.round(draftTotal()*100)/100,notes:up(d.notes),deliveryDate:d.deliveryDate||'',
+      status:'new',createdBy:S.me.id,createdAt:Date.now(),updatedAt:Date.now()};
+    order.priceAdjusted=order.lines.some(l=>l.adjusted); order.listTotal=Math.round(order.lines.reduce((a,l)=>a+l.qty*l.basePrice,0)*100)/100;
+    const aj=myActiveJourney(); if(aj) order.journeyId=aj.id;
+    order.customer.taxId=c.taxId||'';
+    try{ const ref=S.db.collection('orders').doc(); if(await commit(ref.set(order))==='queued') toast('Saved on this phone. It will send when you are back online.');
+      S.lastOrder={id:ref.id,...order}; S.draft=newDraft(); saveDraft(); S.step='done'; S.placing=false; render(); window.scrollTo(0,0);
+    }catch(e){ S.placing=false; render(); toast(writeErr(e)); }
+  },
+  openOrder:(el)=>openOrder(el.dataset.id),
+  viewProduct:(el)=>viewProductModal(el.dataset.id),
+  orderSheet:(el)=>{ const o=S.orders.find(x=>x.id===el.dataset.id)||S.lastOrder; if(!o) return;
+    modal(`<div class="sh"><h2>Order sheet</h2><button class="x" data-a="close">×</button></div>${sheetHTML(o)}
+    <div class="actions"><button class="btn ghost" data-a="openOrder" data-id="${esc(o.id)}">Back to order</button>${S.downloads?`<button class="btn" data-a="sheetPdf" data-id="${esc(o.id)}">Download PDF</button>`:''}</div>`);
+    $('.sheet').style.maxWidth='860px'; },
+  sheetPdf: async (el)=>{ const o=S.orders.find(x=>x.id===el.dataset.id)||S.lastOrder; el.disabled=true; el.textContent='Preparing…';
+    try{ const blob=await sheetPDF(o); await S.downloads.save({filename:`${o.number} ${up(o.customer&&o.customer.name||'')}.pdf`.replace(/[\\/:*?"<>|]/g,''),data:blob}); }
+    catch(e){ if(e&&e.code==='declined'){} else if(e&&e.message==='nopdf'){ try{ await S.downloads.save({filename:`${o.number}.html`,data:'<!doctype html><meta charset="utf-8"><title>'+esc(o.number)+'</title><body style="font-family:Arial,sans-serif;max-width:900px;margin:24px auto">'+sheetHTML(o)+'</body>'}); }catch(x){} } else toast('Download failed'); }
+    el.disabled=false; el.textContent='Download PDF'; },
+  setStatus: async (el)=>{ try{ await S.db.collection('orders').doc(el.dataset.id).update({status:el.dataset.s,updatedAt:Date.now()}); toast('Marked '+statusLabel(el.dataset.s).toLowerCase()); const o=S.orders.find(x=>x.id===el.dataset.id); if(o) o.status=el.dataset.s; openOrder(el.dataset.id); }catch(e){ toast(writeErr(e)); } },
+  deleteOrder: async (el)=>{ if(!confirm('Delete this order permanently?')) return; try{ await S.db.collection('orders').doc(el.dataset.id).delete(); closeModal(); toast('Order deleted'); }catch(e){ toast(writeErr(e)); } },
+  reorder:(el)=>{ const o=S.orders.find(x=>x.id===el.dataset.id)||S.lastOrder; if(!o) return; closeModal();
+    const c=getCustomer(o.customerId)||{id:o.customerId,...o.customer};
+    S.draft=newDraft(o.channel); S.draft.customerId=c.id; S.draft.customer=c;
+    let skipped=0; (o.lines||[]).forEach(l=>{ if(S.products.some(p=>p.id===l.pid && p.active!==false)) { S.draft.lines[l.pid]=l.qty; if(l.adjusted) S.draft.prices[l.pid]=l.price; } else skipped++; });
+    saveDraft(); S.view='order'; S.step='review'; render(); window.scrollTo(0,0); if(skipped) toast(skipped+' items are no longer in the catalog'); },
+  orderFilter:(el)=>{ S.orderFilter=el.dataset.k; render(); },
+  custFilter:(el)=>{ S.custFilter=el.dataset.k; render(); },
+  catSeg:(el)=>{ S.catSeg=el.dataset.k; render(); },
+  exportOrders: async ()=>{
+    const rows=[['Order','Date','Status','Customer','Type','Salesperson','SKU','Product','Pack','Qty','Price','Line total','Order total','Delivery','Notes']];
+    filteredOrders().forEach(o=>(o.lines||[]).forEach(l=>rows.push([o.number,new Date(o.createdAt).toISOString().slice(0,10),statusLabel(o.status),o.customer&&o.customer.name,CH[o.channel]&&CH[o.channel].label,nameOf(o.createdBy),l.sku,l.name,l.pack,l.qty,l.price,(l.qty*l.price).toFixed(2),o.total,o.deliveryDate,o.notes])));
+    try{ await S.downloads.save({filename:`seaways-orders-${new Date().toISOString().slice(0,10)}.csv`,data:toCSV(rows)}); }catch(e){ if(e&&e.code!=='declined') toast('Download failed'); }
+  },
+  template: async ()=>{ try{ await S.downloads.save({filename:'seaways-catalog-template.csv',data:TEMPLATE}); }catch(e){} },
+  importCsv:()=>importModal(),
+  runImport:()=>runImport(),
+  bulkPhotos:()=>photosModal(),
+  editProduct:(el)=>productModal(el.dataset.id),
+  removePhoto:()=>{ S._removePhoto=true; S._pfile=null; const t=$('#pthumb'); if(t) t.textContent='—'; },
+  saveProduct: async (el)=>{
+    const f=readForm('prodForm'); const form=$('#prodForm');
+    if(!f.name||!f.sku){ toast('Name and SKU are required'); return; }
+    const channels=['restaurant','grocery'].filter(t=>form.querySelector(`[name=ch_${t}]`).checked);
+    const id=el.dataset.id||skuId(f.sku); const ex=S.products.find(p=>p.id===id);
+    if(!el.dataset.id && ex){ toast('That SKU already exists'); return; }
+    el.disabled=true; el.textContent='Saving…';
+    try{
+      let imageId=ex?ex.imageId||null:null;
+      if(S._removePhoto) imageId=null;
+      if(S._pfile) imageId=await uploadImage(S._pfile);
+      const st={unitQty:f.unitQty===''?null:num(f.unitQty),unit:f.unit||'LB',pcs:f.pcs===''?null:num(f.pcs)};
+      const body={sku:up(f.sku),name:up(f.name),category:up(f.category),unitQty:st.unitQty,unit:st.unit,pcs:st.pcs,pack:packText(st,ex&&ex.pack||''),customerPrices:ex&&ex.customerPrices||{},price:num(f.price),stock:f.stock===''?null:num(f.stock),lowAt:f.lowAt===''?10:num(f.lowAt),minPrice:f.minPrice===''?null:num(f.minPrice),moq:Math.max(1,Math.round(num(f.moq))||1),
+        channels,active:form.querySelector('[name=active]').checked,imageId,updatedAt:Date.now(),createdAt:ex&&ex.createdAt||Date.now()};
+      await withRetry(()=>S.db.collection('catalog').doc(id).set(body));
+      closeModal(); toast('Product saved');
+    }catch(e){ el.disabled=false; el.textContent='Save product'; toast(writeErr(e,'admin')); }
+  },
+  deleteProduct: async (el)=>{ if(!confirm('Delete this product? Past orders keep their copy.')) return; try{ await S.db.collection('catalog').doc(el.dataset.id).delete(); closeModal(); toast('Product deleted'); }catch(e){ toast(writeErr(e,'admin')); } },
+
+  /* bulk */
+  bulkTog:(el)=>{ const p=S.products.find(x=>x.id===el.dataset.id); const cur=[...(bval(p,'channels')||[])]; const ch=el.dataset.ch;
+    const next=cur.includes(ch)?cur.filter(c=>c!==ch):[...cur,ch]; bset(p,'channels',['restaurant','grocery'].filter(c=>next.includes(c))); render(); },
+  bulkApply:()=>{
+    const f=$('#apField').value, op=$('#apOp').value, raw=$('#apVal').value, v=num(raw); const cid=S.bulk.cust;
+    const needsVal=!['active','restaurant','grocery'].includes(f)&&op!=='clear'; if(needsVal && raw.trim()===''){ toast('Enter a value'); return; }
+    const ids=Object.keys(S.bulk.sel).filter(k=>S.bulk.sel[k]); let n=0;
+    ids.forEach(id=>{ const p=S.products.find(x=>x.id===id); if(!p) return; n++;
+      if(f==='active'){ bset(p,'active',op==='yes'); return; }
+      if(f==='restaurant'||f==='grocery'){ const cur=bval(p,'channels')||[]; const nx=op==='yes'?[...new Set([...cur,f])]:cur.filter(c=>c!==f); bset(p,'channels',['restaurant','grocery'].filter(c=>nx.includes(c))); return; }
+      if(f==='cprice'){ const cps={...(bval(p,'customerPrices')||{})}; if(op==='clear'){ cps[cid]=null; bset(p,'customerPrices',cps); return; }
+        const cur=cps[cid]; const base=cur==null||cur===''?Number(bval(p,'price'))||0:Number(cur); cps[cid]=Math.max(0,Math.round(calc(base,op,v)*100)/100); bset(p,'customerPrices',cps); return; }
+      const base=Number(bval(p,f))||0; let r=Math.max(0,calc(base,op,v));
+      r = f==='moq'? Math.max(1,Math.round(r)) : Math.round(r*100)/100; bset(p,f,r); });
+    toast(`Applied to ${n} products. Press Save changes to keep them.`); render();
+  },
+  bulkDiscard:()=>{ if(!confirm('Discard all unsaved changes?')) return; S.bulk.edits={}; render(); },
+  bulkSave: async ()=>{
+    const changed=S.products.filter(bchanged); if(!changed.length) return; S.bulk.saving=true; render();
+    let fail=0, lastErr=null;
+    const ops=changed.map(p=>{ const e=S.bulk.edits[p.id]; const patch={updatedAt:Date.now()};
+      Object.keys(e).forEach(k=>patch[k]=e[k]);
+      if(SF.some(k=>k in e)){ const st={unitQty:bval(p,'unitQty'),unit:bval(p,'unit'),pcs:bval(p,'pcs')}; patch.unitQty=st.unitQty; patch.unit=st.unit; patch.pcs=st.pcs; patch.pack=packText(st,p.pack||''); }
+      return {op:'update',col:'catalog',id:p.id,data:patch}; });
+    try{ await S.db.bulk(ops); changed.forEach(p=>delete S.bulk.edits[p.id]); }catch(err){ fail=changed.length; lastErr=err; }
+    S.bulk.saving=false; render(); toast(fail?`${changed.length-fail} saved, ${fail} failed. ${writeErr(lastErr,'admin')}`:`Saved ${changed.length} products`);
+  },
+  bulkExport: async ()=>{
+    const cid=S.bulk.cust; const rows=[['sku','name','category','unit_size','unit','pcs_per_case','pack_size','case_weight','price',...(cid?['customer_price']:[]),'min_price','moq','stock_qty','low_stock','channel','active']];
+    bulkList().forEach(p=>{ const ch=p.channels||[]; const st=struct(p); rows.push([p.sku,p.name,p.category,st.unitQty??'',st.unit,st.pcs??'',packOf(p),cwOf(p),p.price,...(cid?[(p.customerPrices||{})[cid]??'']:[]),p.minPrice??'',p.moq||1,p.stock==null?'':p.stock,p.lowAt==null?'':p.lowAt,ch.length===2?'both':ch[0]||'',p.active===false?'no':'yes']); });
+    try{ await S.downloads.save({filename:`seaways-products-${new Date().toISOString().slice(0,10)}.csv`,data:toCSV(rows)}); }catch(e){ if(e&&e.code!=='declined') toast('Download failed'); }
+  },
+  /* journeys */
+  jgeo: async (el)=>{ el.disabled=true; el.textContent='Locating…'; try{ S.jform[el.dataset.k]=await getGeo(); render(); }catch(e){ el.disabled=false; el.textContent='Capture'; toast('Location not available. Type the city instead.'); } },
+  startJourney: async (el)=>{
+    const f=S.jform, err=$('#jerr');
+    if(myActiveJourney()){ render(); return; }
+    if(String(f.startOdo||'').trim()===''){ err.textContent='Enter the starting odometer.'; return; }
+    if(!f.startPhoto){ err.textContent='Take a photo of the odometer.'; return; }
+    el.disabled=true; el.textContent='Getting location…'; try{ f.startGeo=await getGeo(); }catch(e){ S.jform.startGeo_st='fail'; } el.disabled=false; el.textContent='Start journey';
+    if(!f.startGeo && !String(f.startPlace||'').trim()){ err.textContent='Location is blocked. Type the starting city.'; return; }
+    el.disabled=true; el.textContent='Starting…';
+    const ref=S.db.collection('journeys').doc(); const now=Date.now();
+    const body={memberId:S.me.id,purpose:up(f.purpose||'MARKETING'),status:'active',startAt:now,startOdo:num(f.startOdo),startPlace:up(f.startPlace)||(f.startGeo?'GPS LOCATION':''),startGeo:f.startGeo||null,hasStartPhoto:!!f.startPhoto,hasEndPhoto:false,createdAt:now,updatedAt:now};
+    try{ if(f.startPhoto) await commit(S.db.doc('journeyPhotos/'+ref.id+'-start').set({data:f.startPhoto,at:now,memberId:S.me.id}));
+      await commit(ref.set(body)); if(!S.journeys.some(x=>x.id===ref.id)) S.journeys=[{id:ref.id,...body},...S.journeys]; S.jform={}; toast('Journey started. Drive safe.'); render(); window.scrollTo(0,0); }
+    catch(e){ el.disabled=false; el.textContent='Start journey'; err.textContent=writeErr(e); }
+  },
+  endJourney: async (el)=>{
+    const j=myActiveJourney(); if(!j) return; const f=S.jform, err=$('#jerr');
+    if(String(f.endOdo||'').trim()===''){ err.textContent='Enter the ending odometer.'; return; }
+    const eo=num(f.endOdo); if(eo<j.startOdo){ err.textContent=`Ending odometer can't be lower than ${mi(j.startOdo)}.`; return; }
+    const dist=Math.round((eo-j.startOdo)*10)/10; if(dist>600 && !confirm(`That's ${mi(dist)} miles. Is the reading right?`)) return;
+    if(!f.endPhoto){ err.textContent='Take a photo of the odometer.'; return; }
+    el.disabled=true; el.textContent='Getting location…'; try{ f.endGeo=await getGeo(); }catch(e){ S.jform.endGeo_st='fail'; } el.disabled=false; el.textContent='End journey';
+    if(!f.endGeo && !String(f.endPlace||'').trim()){ err.textContent='Location is blocked. Type the ending city.'; return; }
+    el.disabled=true; el.textContent='Saving…'; const now=Date.now();
+    const patch={status:'pending',endAt:now,endOdo:eo,endPlace:up(f.endPlace)||(f.endGeo?'GPS LOCATION':''),endGeo:f.endGeo||null,notes:up(f.notes),distance:dist,durationMin:Math.round((now-j.startAt)/60000),hasEndPhoto:!!f.endPhoto,updatedAt:now};
+    try{ if(f.endPhoto) await commit(S.db.doc('journeyPhotos/'+j.id+'-end').set({data:f.endPhoto,at:now,memberId:S.me.id}));
+      await commit(S.db.collection('journeys').doc(j.id).update(patch)); Object.assign(j,patch); S.jform={}; toast(`Journey saved: ${mi(dist)} mi`); render(); window.scrollTo(0,0); }
+    catch(e){ el.disabled=false; el.textContent='End journey'; err.textContent=writeErr(e); }
+  },
+  openJourney:(el)=>openJourney(el.dataset.id),
+  jphotoView: async (el)=>{
+    const id=el.dataset.id, w=el.dataset.w; let box=$('#jphotobox');
+    if(!box){ openJourney(id); box=$('#jphotobox'); }
+    box.innerHTML='<p class="muted small" style="margin-top:10px">Loading photo…</p>';
+    try{ const s=await S.db.doc('journeyPhotos/'+id+'-'+w).get(); const d=s.exists&&s.data().data;
+      box.innerHTML = d && /^data:image\/(jpeg|png|webp);base64,/.test(d) ? `<p class="small muted" style="margin-top:12px">${w==='start'?'Start':'End'} odometer</p><img class="photoprev" style="max-height:60vh" src="${d}" alt="Odometer photo">` : '<p class="muted small">Photo not found.</p>'; }
+    catch(e){ box.innerHTML='<p class="muted small">Could not load photo.</p>'; }
+  },
+  verifyJourney: async (el)=>{ try{ await S.db.collection('journeys').doc(el.dataset.id).update({status:'verified',verifiedBy:S.me.id,verifiedAt:Date.now(),updatedAt:Date.now()}); toast('Trip verified'); if($('#modal').innerHTML) openJourney(el.dataset.id); }catch(e){ toast(writeErr(e)); } },
+  correctJourney:(el)=>{ const j=S.journeys.find(x=>x.id===el.dataset.id); if(!j) return;
+    modal(`<div class="sh"><h2>Correct trip</h2><button class="x" data-a="close">×</button></div><p class="muted small" style="margin-bottom:12px;text-transform:uppercase">${esc(nameOf(j.memberId))}, ${fmtDate(j.startAt)}</p>${journeyForm({...j,endAt:j.endAt||Date.now()})}
+    <div class="actions"><button class="btn ghost" data-a="close">Cancel</button><button class="btn ghost" data-a="saveJourney" data-id="${esc(j.id)}">Save</button><button class="btn" data-a="saveJourney" data-id="${esc(j.id)}" data-verify="1">Save and verify</button></div>`); },
+  logForMember:()=>{ modal(`<div class="sh"><h2>Log a trip</h2><button class="x" data-a="close">×</button></div>${journeyForm(null,true)}<div class="actions"><button class="btn ghost" data-a="close">Cancel</button><button class="btn" data-a="saveJourney" data-new="1">Save trip</button></div>`); },
+  saveJourney: async (el)=>{
+    const r=readJourneyForm(); if(r.err){ $('#jferr').textContent=r.err; return; } el.disabled=true; const now=Date.now();
+    try{
+      if(el.dataset.new){ await withRetry(()=>S.db.collection('journeys').doc().set({...r.body,memberId:r.memberId,status:'verified',hasStartPhoto:false,hasEndPhoto:false,loggedBy:S.me.id,verifiedBy:S.me.id,verifiedAt:now,createdAt:now,updatedAt:now})); toast('Trip logged'); }
+      else { const patch={...r.body,correctedBy:S.me.id,correctedAt:now,updatedAt:now}; if(el.dataset.verify){ patch.status='verified'; patch.verifiedBy=S.me.id; patch.verifiedAt=now; }
+        await withRetry(()=>S.db.collection('journeys').doc(el.dataset.id).update(patch)); toast(el.dataset.verify?'Corrected and verified':'Trip corrected'); }
+      closeModal();
+    }catch(e){ el.disabled=false; $('#jferr').textContent=writeErr(e); }
+  },
+  deleteJourney: async (el)=>{ if(!confirm('Delete this trip permanently?')) return; const id=el.dataset.id;
+    try{ await S.db.collection('journeys').doc(id).delete(); S.db.doc('journeyPhotos/'+id+'-start').delete().catch(()=>{}); S.db.doc('journeyPhotos/'+id+'-end').delete().catch(()=>{}); closeModal(); toast('Trip deleted'); }catch(e){ toast(writeErr(e)); } },
+  exportJourneys: async ()=>{
+    const rate=Number(S.app.rate)||0;
+    const rows=[['Date','Member','Purpose','Start time','End time','Start location','End location','Start odometer','End odometer','Miles','Duration (min)','Status','Reimbursement','Orders','Order value','Notes']];
+    jFiltered().forEach(j=>{ const od=jOrders(j); rows.push([new Date(j.startAt).toISOString().slice(0,10),nameOf(j.memberId),j.purpose,fmtTime(j.startAt),fmtTime(j.endAt),j.startPlace,j.endPlace||'',j.startOdo,j.endOdo==null?'':j.endOdo,j.distance||'',j.durationMin||'',JSTATUS[j.status],rate&&j.distance?(j.distance*rate).toFixed(2):'',od.length,od.reduce((a,o)=>a+(o.total||0),0).toFixed(2),j.notes||'']); });
+    try{ await S.downloads.save({filename:`seaways-journeys-${new Date().toISOString().slice(0,10)}.csv`,data:toCSV(rows)}); }catch(e){ if(e&&e.code!=='declined') toast('Download failed'); }
+  },
+
+  /* team */
+  addAccount:()=>{ modal(`<div class="sh"><h2>Add login</h2><button class="x" data-a="close">×</button></div>${accountForm()}<div class="actions"><button class="btn ghost" data-a="close">Cancel</button><button class="btn" data-a="saveAccount">Create login</button></div>`); },
+  editAccount:(el)=>{ const a=S.accounts[el.dataset.id]; modal(`<div class="sh"><h2>Edit login</h2><button class="x" data-a="close">×</button></div>${accountForm(a)}<div class="actions">${a.id!==S.me.id?`<button class="btn danger" data-a="deleteAccount" data-id="${esc(a.id)}">Delete</button>`:''}<button class="btn ghost" data-a="close">Cancel</button><button class="btn" data-a="saveAccount" data-id="${esc(a.id)}">Save</button></div>`); },
+  saveAccount: async (el)=>{
+    const f=readForm('accForm'); const err=$('#accerr'); const id=el.dataset.id; const ex=id&&S.accounts[id];
+    const active=ex? !!document.querySelector('#accForm [name=active]').checked : true;
+    if(ex && ex.id===S.me.id && (f.role!=='admin'||!active)){ err.textContent="You can't remove your own admin access."; return; }
+    el.disabled=true;
+    try{ await API.call('account',{id:id||null,name:f.name,username:f.username,role:f.role,active,password:f.pw||''}); closeModal(); toast(ex?'Login updated':'Login created'); syncSoon(0); }
+    catch(e){ el.disabled=false; err.textContent=e.message||'Could not save.'; }
+  },
+  deleteAccount: async (el)=>{ if(!confirm('Delete this login? They can no longer sign in. Their past orders and trips stay.')) return;
+    try{ await API.call('account-delete',{id:el.dataset.id}); closeModal(); toast('Login deleted'); syncSoon(0); }catch(e){ toast(e.message||'Could not delete.'); } },
+  changePw:()=>{ closeModal(); modal(`<div class="sh"><h2>Change password</h2><button class="x" data-a="close">×</button></div><form id="pwForm" class="stack" onsubmit="return false"><label class="f">Current password<input class="input" type="password" name="cur" autocomplete="current-password"></label><label class="f">New password<span class="hint">At least 6 characters</span><input class="input" type="password" name="pw" autocomplete="new-password"></label><label class="f">Repeat new password<input class="input" type="password" name="pw2" autocomplete="new-password"></label><div class="err" id="pwerr"></div></form><div class="actions"><button class="btn ghost" data-a="close">Cancel</button><button class="btn" data-a="savePw">Change password</button></div>`); },
+  savePw: async (el)=>{ const f=readForm('pwForm'); const err=$('#pwerr');
+    if(f.pw.length<6){ err.textContent='New password must be at least 6 characters.'; return; } if(f.pw!==f.pw2){ err.textContent='New passwords don\'t match.'; return; }
+    el.disabled=true;
+    try{ await API.call('password',{current:f.cur,next:f.pw}); closeModal(); toast('Password changed'); }
+    catch(e){ el.disabled=false; err.textContent=e.message||'Could not change the password.'; } },
+  saveCompany: async ()=>{ const f=readForm('coForm'); const co={name:up(f.name),tagline:up(f.tagline),address:up(f.address),phone:f.phone,email:f.email.toLowerCase()}; try{ await S.db.doc('settings/app').set({...S.app,company:co}); toast('Company details saved'); }catch(e){ toast(writeErr(e,'admin')); } },
+  saveRate: async ()=>{ const v=$('#rateIn').value.trim(); try{ await S.db.doc('settings/app').set({...S.app,rate:v===''?null:num(v)}); toast('Rate saved'); }catch(e){ toast(writeErr(e,'admin')); } },
+  capsAll: async (el)=>{
+    if(!confirm('Convert all product, customer and order text to capitals?')) return; el.disabled=true; el.textContent='Converting…'; let n=0, fail=0;
+    const P=['name','category','pack','sku'], C=['name','contact','address','city','taxId','notes'];
+    const jobs=[];
+    S.products.forEach(p=>{ const patch={}; P.forEach(k=>{ if(p[k] && p[k]!==up(p[k])) patch[k]=up(p[k]); }); if(Object.keys(patch).length) jobs.push(['catalog',p.id,patch]); });
+    S.customers.forEach(c=>{ const patch={}; C.forEach(k=>{ if(c[k] && c[k]!==up(c[k])) patch[k]=up(c[k]); }); if(Object.keys(patch).length) jobs.push(['customers',c.id,patch]); });
+    S.orders.forEach(o=>{ const cu={...(o.customer||{})}; let ch=false; ['name','contact','address','city'].forEach(k=>{ if(cu[k]&&cu[k]!==up(cu[k])){cu[k]=up(cu[k]);ch=true;} });
+      const lines=(o.lines||[]).map(l=>{ const nl={...l}; ['name','pack','sku'].forEach(k=>{ if(nl[k]&&nl[k]!==up(nl[k])){nl[k]=up(nl[k]);ch=true;} }); return nl; });
+      if(o.notes&&o.notes!==up(o.notes)) ch=true; if(ch) jobs.push(['orders',o.id,{customer:cu,lines,notes:up(o.notes)}]); });
+    try{ await S.db.bulk(jobs.map(([c,id,patch])=>({op:'update',col:c,id,data:patch}))); n=jobs.length; }catch(e){ fail=jobs.length; }
+    el.disabled=false; el.textContent='Convert now'; toast(jobs.length?`Converted ${n} records${fail?`, ${fail} failed`:''}`:'Everything is already in capitals');
+  },
+  close:()=>closeModal(),
+  scrim:(el,e)=>{ if(e.target===el) closeModal(); }
+};
+document.addEventListener('click',e=>{ const el=e.target.closest('[data-a]'); if(!el) return; const f=A[el.dataset.a]; if(!f) return; if(el.dataset.a!=='scrim') e.preventDefault(); f(el,e); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#modal').innerHTML) closeModal(); if(e.key==='Enter' && e.target.closest && e.target.closest('#loginForm,#setupForm') && e.target.tagName==='INPUT'){ e.preventDefault(); const b=document.querySelector('#authroot .btn'); b&&b.click(); } });
+
+const IN = {
+  q:(t)=>{ S.q[t.dataset.k]=t.value; render(); },
+  custAll:(t)=>{ S.custAll=t.checked; render(); },
+  qty:(t)=>{ if(t.value==='') return; setQty(t.dataset.id, Number(t.value)); clearTimeout(IN._t); IN._t=setTimeout(render, Number(t.value)<=0?0:600); },
+  lprice:(t)=>{ if(!S.draft.prices) S.draft.prices={}; const v=t.value.trim(); if(v==='') delete S.draft.prices[t.dataset.id]; else S.draft.prices[t.dataset.id]=Math.max(0,num(v)); saveDraft(); clearTimeout(IN._p); IN._p=setTimeout(render,700); },
+  draftField:(t)=>{ S.draft[t.dataset.k]=t.value; saveDraft(); },
+  csvpaste:(t)=>previewImport(t.value),
+  csvfile:(t)=>{ const f=t.files[0]; if(!f) return; f.text().then(txt=>{ const p=$('#csvpaste'); if(p) p.value=txt; previewImport(txt); }); },
+  pfile:(t)=>{ const f=t.files[0]; if(!f) return; S._pfile=f; S._removePhoto=false; const th=$('#pthumb'); if(th){ th.innerHTML=''; const im=document.createElement('img'); im.src=URL.createObjectURL(f); th.appendChild(im); } const n=$('#pfilename'); if(n) n.textContent=f.name; },
+  bulkphotos:(t)=>{ if(t.files.length) runBulkPhotos(t.files); },
+  bulk:(t)=>{ const p=S.products.find(x=>x.id===t.dataset.id); if(!p) return; let f=t.dataset.f; let v;
+    if(f==='name'){ v=up(t.value); if(!v) return; }
+    else if(f==='cprice'){ const cps={...(bval(p,'customerPrices')||{})}; cps[S.bulk.cust]=t.value.trim()===''?null:num(t.value); f='customerPrices'; v=cps; }
+    else v=t.value.trim()===''?null:num(t.value);
+    bset(p,f,v); t.classList.toggle('chg',!eqv(f,v,baseVal(p,f))); t.closest('tr').classList.toggle('chg',bchanged(p));
+    if(SF.includes(f)){ const w=caseWt({unitQty:bval(p,'unitQty'),unit:bval(p,'unit'),pcs:bval(p,'pcs')}); const c=document.getElementById('cw_'+p.id); if(c) c.textContent=w?w.text:'—'; }
+    clearTimeout(IN._b); IN._b=setTimeout(()=>{ const n=bulkChangedCount(); const sb=document.querySelector('[data-a=bulkSave]'); if(sb){ sb.disabled=!n; sb.textContent=`Save changes${n?' ('+n+')':''}`; } const db=document.querySelector('[data-a=bulkDiscard]'); if(db) db.disabled=!n; },150); },
+  bulkUnit:(t)=>{ const p=S.products.find(x=>x.id===t.dataset.id); bset(p,'unit',t.value); render(); },
+  bulkCust:(t)=>{ S.bulk.cust=t.value; if(!t.value && S.bulk.apField==='cprice') S.bulk.apField='price'; render(); },
+  pcalc:()=>{ const f=readForm('prodForm'); const st={unitQty:num(f.unitQty),unit:f.unit,pcs:num(f.pcs)}; const w=caseWt(st); const o=$('#pcalcOut'); if(o) o.textContent=w?`Case: ${packText(st)} = ${w.text}`:'Case weight is calculated from unit size × pcs per case.'; },
+  bulkActive:(t)=>{ const p=S.products.find(x=>x.id===t.dataset.id); bset(p,'active',t.checked); render(); },
+  bulkSel:(t)=>{ S.bulk.sel[t.dataset.id]=t.checked; render(); },
+  bulkSelAll:(t)=>{ bulkList().forEach(p=>S.bulk.sel[p.id]=t.checked); render(); },
+  bulkCat:(t)=>{ S.bulk.cat=t.value; render(); },
+  bulkOnly:(t)=>{ S.bulk.only=t.checked; render(); },
+  apField:(t)=>{ S.bulk.apField=t.value; $('#apOp').innerHTML=apOps(t.value); $('#apVal').hidden=['active','restaurant','grocery'].includes(t.value); },
+  jf:(t)=>{ S.jform[t.dataset.k]=t.value; },
+  jphoto: async (t)=>{ const f=t.files[0]; if(!f) return; try{ S.jform[t.dataset.k]=await compressToDataURL(f); render(); }catch(e){ toast('Could not read that photo. Try again.'); } },
+  jfMember:(t)=>{ S.jf.member=t.value; render(); },
+  jfStatus:(t)=>{ S.jf.status=t.value; render(); }
+};
+const ON_CHANGE=['bulkUnit','bulkCust','csvfile','pfile','bulkphotos','custAll','bulkActive','bulkSel','bulkSelAll','bulkCat','bulkOnly','apField','jphoto','jfMember','jfStatus'];
+document.addEventListener('input',e=>{ const t=e.target; const k=t.dataset&&t.dataset.in; if(k && IN[k] && !ON_CHANGE.includes(k)) IN[k](t,e); });
+document.addEventListener('change',e=>{ const t=e.target; const k=t.dataset&&t.dataset.in; if(k && IN[k] && (ON_CHANGE.includes(k) || t.tagName==='SELECT')) IN[k](t,e); });
+
+/* ---------- data layer: Netlify function + Blobs ---------- */
+const IMGKIND={productImages:'product',journeyPhotos:'journey'};
+const API={
+  token:null,
+  setToken(t){ API.token=t; try{ t?localStorage.setItem('sw_tok',t):localStorage.removeItem('sw_tok'); }catch(e){} },
+  async call(path,body){
+    let r; try{ r=await fetch('/api/'+path,{method:body?'POST':'GET',headers:{'content-type':'application/json',...(API.token?{authorization:'Bearer '+API.token}:{})},body:body?JSON.stringify(body):undefined}); }
+    catch(e){ throw {code:'network',message:'No internet connection.'}; }
+    const j=await r.json().catch(()=>({}));
+    if(r.status===401 && path!=='login'){ S.authMsg='Please sign in again.'; stopData(); renderAuth(); throw {code:'unauthenticated',message:j.error}; }
+    if(!r.ok) throw {code:j.code||(r.status===403?'permission-denied':'error'),message:j.error||'Something went wrong.'};
+    return j;
+  }
+};
+S.cols={}; S.revs={}; S.queue=[];
+const qKey=()=> 'sw_q_'+(S.me?S.me.id:'x');
+function derive(){
+  const c=S.cols, vals=k=>Object.entries(c[k]||{}).map(([id,d])=>({id,...d}));
+  S.products=vals('catalog'); S.customers=vals('customers'); S.customers.forEach(x=>delete S.pendingCustomers[x.id]);
+  S.orders=vals('orders').sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); S.journeys=vals('journeys').sort((a,b)=>(b.startAt||0)-(a.startAt||0));
+  const acc={}; vals('accounts').forEach(a=>acc[a.id]=a); S.accounts=acc; S.app=(c.settings&&c.settings.app)||{};
+}
+function applyLocal(op){ const col=S.cols[op.col]||(S.cols[op.col]={});
+  if(op.op==='delete') delete col[op.id]; else if(op.op==='set') col[op.id]=JSON.parse(JSON.stringify(op.data)); else if(col[op.id]) col[op.id]={...col[op.id],...JSON.parse(JSON.stringify(op.data))}; }
+let flushing=null;
+async function flush(){
+  if(flushing) return flushing;
+  flushing=(async()=>{ let result='ok';
+    while(S.queue.length){ const batch=S.queue.slice(0,400);
+      try{ await API.call('write',{ops:batch.map(x=>x.op)}); S.queue.splice(0,batch.length); lsSet(qKey(),S.queue.map(x=>x.op)); batch.forEach(x=>x.res&&x.res('ok')); }
+      catch(e){ if(e.code==='network'||e.code==='error'&&/Busy/.test(e.message||'')){ result='queued'; batch.forEach(x=>{ x.res&&x.res('queued'); x.res=null; x.rej=null; }); break; }
+        S.queue.splice(0,batch.length); lsSet(qKey(),S.queue.map(x=>x.op)); batch.forEach(x=>x.rej&&x.rej(e)); if(!batch.some(x=>x.rej)) toast(e.message||'A change could not be saved.'); syncSoon(0); break; } }
+    flushing=null; if(result==='ok') syncSoon(700); return result; })();
+  return flushing;
+}
+function write(ops){ return new Promise((res,rej)=>{ ops.forEach((op,i)=>{ applyLocal(op); S.queue.push({op,res:i===ops.length-1?res:null,rej:i===ops.length-1?rej:null}); }); lsSet(qKey(),S.queue.map(x=>x.op)); derive(); render(); flush(); }); }
+function docRef(col,id){ const kind=IMGKIND[col]; return { id,
+  get: async()=>{ if(kind){ const d=await API.call(`img?kind=${kind}&id=${encodeURIComponent(id)}`).catch(()=>({})); return {exists:!!d.data,data:()=>d}; } const d=(S.cols[col]||{})[id]; return {exists:!!d,data:()=>d}; },
+  set: d=> kind ? API.call('img',{kind,id,...d}) : write([{op:'set',col,id,data:d}]),
+  update: d=> write([{op:'update',col,id,data:d}]),
+  delete: ()=> kind ? Promise.resolve() : write([{op:'delete',col,id}]) }; }
+const genId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,10);
+S.db={ collection:col=>({ doc:id=>docRef(col,id||genId()) }), doc:p=>{ const [c,id]=p.split('/'); return docRef(c,id); }, bulk:ops=>write(ops) };
+S.downloads={ save: async ({filename,data})=>{ const blob=data instanceof Blob?data:new Blob([data],{type:/\.csv$/.test(filename)?'text/csv':/\.html$/.test(filename)?'text/html':'application/octet-stream'}); const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000); return {status:'saved'}; } };
+S.assets={};
+
+let syncT=null, syncing=false;
+function syncSoon(ms){ clearTimeout(syncT); syncT=setTimeout(sync, ms==null?45000:ms); }
+async function sync(){
+  if(!API.token||syncing) return; syncing=true;
+  try{ const r=await API.call('sync?revs='+encodeURIComponent(JSON.stringify(S.revs)));
+    const prevRole=S.me&&S.me.role; S.me={...r.me};
+    for(const [k,v] of Object.entries(r.cols)){ S.cols[k]=v.docs; S.revs[k]=v.rev; }
+    saveCache(); S.queue.forEach(x=>applyLocal(x.op)); derive(); S.accounts[S.me.id]={...S.me,...(S.accounts[S.me.id]||{})};
+    if(prevRole && prevRole!==S.me.role){ S.revs={}; S.view=role()==='admin'?'dashboard':'order'; }
+    if(!S.ready2){ S.ready2=true; S.draft=lsGet(draftKey())||newDraft(); S.view=role()==='admin'?'dashboard':'order'; S.step='channel'; showApp(); }
+    render();
+  }catch(e){}
+  syncing=false; syncSoon(document.hidden?180000:45000);
+}
+function saveCache(){ try{ localStorage.setItem('sw_cache',JSON.stringify({me:S.me,cols:S.cols,revs:S.revs})); }catch(e){ try{ localStorage.removeItem('sw_cache'); }catch(x){} } }
+function loadCache(){ const c=lsGet('sw_cache'); if(!c||!c.me) return false; S.me=c.me; S.cols=c.cols||{}; S.revs=c.revs||{}; derive(); S.accounts[S.me.id]={...S.me,...(S.accounts[S.me.id]||{})};
+  S.ready2=true; S.draft=lsGet(draftKey())||newDraft(); S.view=role()==='admin'?'dashboard':'order'; S.step='channel'; showApp(); render(); return true; }
+async function startSession(fromBoot){ S.revs={}; S.cols={}; S.ready2=false;
+  if(!(fromBoot && loadCache())) authScreen('<p class="muted">Loading…</p>');
+  if(S.me){ S.queue=(lsGet(qKey())||[]).map(op=>({op})); }
+  await sync(); if(!S.me){ renderAuth(); return; }
+  if(!S.queue.length) S.queue=(lsGet(qKey())||[]).map(op=>({op})); if(S.queue.length) flush(); }
+function stopData(){ clearTimeout(syncT); API.setToken(null); try{ localStorage.removeItem('sw_cache'); }catch(e){} S.me=null; S.ready2=false; S.cols={}; S.revs={}; S.queue=[]; derive(); }
+function refreshSession(){ if(!S.me){ renderAuth(); return; } showApp(); render(); }
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden && API.token) syncSoon(0); });
+window.addEventListener('online',()=>{ if(API.token){ flush(); syncSoon(0); } });
+
+function boot(){
+  S.ready=true; S.bootstrapped=null;
+  API.token=(()=>{ try{ return localStorage.getItem('sw_tok'); }catch(e){ return null; } })();
+  if(API.token){ startSession(true); }
+  else authScreen('<p class="muted">Loading…</p>');
+  API.call('status').then(r=>{ S.bootstrapped=r.setup; if(!S.me && !API.token) renderAuth(); }).catch(()=>{ S.bootstrapped=true; if(!S.me && !API.token){ S.authMsg='Can\'t reach the server. Check your connection.'; renderAuth(); } });
+}
+boot();
+})();
+</script>
+</body>
+</html>
